@@ -1,3 +1,9 @@
+/*
+!.gitignore
+!/workspace
+!/src
+!/data_formatted
+
 # Logs
 logs
 *.log

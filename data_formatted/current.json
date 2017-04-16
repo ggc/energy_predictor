@@ -1,0 +1,516 @@
+
+{
+	"_id" : ObjectId("58b7608171e81b0001ece741"),
+	"prediction_made" : ISODate("2017-03-02T00:00:01.197Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 3.38
+		}
+	}
+}
+
+/* 5 */
+{
+	"_id" : ObjectId("58b76e9171e81b0001ece75c"),
+	"prediction_made" : ISODate("2017-03-02T01:00:01.258Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 2.51
+		}
+	}
+}
+
+/* 6 */
+{
+	"_id" : ObjectId("58b77ca171e81b0001ece777"),
+	"prediction_made" : ISODate("2017-03-02T02:00:01.187Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 1.6
+		}
+	}
+}
+
+/* 7 */
+{
+	"_id" : ObjectId("58b78ab171e81b0001ece792"),
+	"prediction_made" : ISODate("2017-03-02T03:00:01.193Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 0.84
+		}
+	}
+}
+
+/* 8 */
+{
+	"_id" : ObjectId("58b798c171e81b0001ece7ad"),
+	"prediction_made" : ISODate("2017-03-02T04:00:01.199Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 0.2
+		}
+	}
+}
+
+/* 9 */
+{
+	"_id" : ObjectId("58b7a6d171e81b0001ece7c8"),
+	"prediction_made" : ISODate("2017-03-02T05:00:01.231Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : -0.12
+		}
+	}
+}
+
+/* 10 */
+{
+	"_id" : ObjectId("58b7b4e171e81b0001ece7e3"),
+	"prediction_made" : ISODate("2017-03-02T06:00:01.171Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 0.31
+		}
+	}
+}
+
+/* 11 */
+{
+	"_id" : ObjectId("58b7c2f171e81b0001ece7fe"),
+	"prediction_made" : ISODate("2017-03-02T07:00:01.212Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 2.48
+		}
+	}
+}
+
+/* 12 */
+{
+	"_id" : ObjectId("58b7d10171e81b0001ece819"),
+	"prediction_made" : ISODate("2017-03-02T08:00:01.169Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 5.11
+		}
+	}
+}
+
+/* 13 */
+{
+	"_id" : ObjectId("58b7df1171e81b0001ece834"),
+	"prediction_made" : ISODate("2017-03-02T09:00:01.228Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 7.6
+		}
+	}
+}
+
+/* 14 */
+{
+	"_id" : ObjectId("58b7ed2171e81b0001ece84f"),
+	"prediction_made" : ISODate("2017-03-02T10:00:01.193Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 9.56
+		}
+	}
+}
+
+/* 15 */
+{
+	"_id" : ObjectId("58b7fb3171e81b0001ece86a"),
+	"prediction_made" : ISODate("2017-03-02T11:00:01.198Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 11.21
+		}
+	}
+}
+
+/* 16 */
+{
+	"_id" : ObjectId("58b8094171e81b0001ece885"),
+	"prediction_made" : ISODate("2017-03-02T12:00:01.205Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 12.37
+		}
+	}
+}
+
+/* 17 */
+{
+	"_id" : ObjectId("58b8175171e81b0001ece8a0"),
+	"prediction_made" : ISODate("2017-03-02T13:00:01.215Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 13.44
+		}
+	}
+}
+
+/* 18 */
+{
+	"_id" : ObjectId("58b8256171e81b0001ece8bb"),
+	"prediction_made" : ISODate("2017-03-02T14:00:01.220Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 14.24
+		}
+	}
+}
+
+/* 19 */
+{
+	"_id" : ObjectId("58b8337171e81b0001ece8d6"),
+	"prediction_made" : ISODate("2017-03-02T15:00:01.286Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 14.07
+		}
+	}
+}
+
+/* 20 */
+{
+	"_id" : ObjectId("58b8418171e81b0001ece8f1"),
+	"prediction_made" : ISODate("2017-03-02T16:00:01.225Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 12.53
+		}
+	}
+}
+
+/* 21 */
+{
+	"_id" : ObjectId("58b84f9171e81b0001ece90c"),
+	"prediction_made" : ISODate("2017-03-02T17:00:01.186Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 10.14
+		}
+	}
+}
+
+/* 22 */
+{
+	"_id" : ObjectId("58b85da171e81b0001ece927"),
+	"prediction_made" : ISODate("2017-03-02T18:00:01.201Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 6.8
+		}
+	}
+}
+
+/* 23 */
+{
+	"_id" : ObjectId("58b86bb171e81b0001ece942"),
+	"prediction_made" : ISODate("2017-03-02T19:00:01.215Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 5.99
+		}
+	}
+}
+
+/* 24 */
+{
+	"_id" : ObjectId("58b879c171e81b0001ece95d"),
+	"prediction_made" : ISODate("2017-03-02T20:00:01.191Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 4.82
+		}
+	}
+}
+
+/* 25 */
+{
+	"_id" : ObjectId("58b887d171e81b0001ece978"),
+	"prediction_made" : ISODate("2017-03-02T21:00:01.210Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 3.79
+		}
+	}
+}
+
+/* 26 */
+{
+	"_id" : ObjectId("58b895e171e81b0001ece993"),
+	"prediction_made" : ISODate("2017-03-02T22:00:01.205Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 2.96
+		}
+	}
+}
+
+/* 27 */
+{
+	"_id" : ObjectId("58b8a3f171e81b0001ece9ae"),
+	"prediction_made" : ISODate("2017-03-02T23:00:01.191Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 2.36
+		}
+	}
+}
+
+/* 28 */
+{
+	"_id" : ObjectId("58b8b20171e81b0001ece9c9"),
+	"prediction_made" : ISODate("2017-03-03T00:00:01.190Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 2.02
+		}
+	}
+}
+
+/* 29 */
+{
+	"_id" : ObjectId("58b8c01171e81b0001ece9e4"),
+	"prediction_made" : ISODate("2017-03-03T01:00:01.262Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 1.53
+		}
+	}
+}
+
+/* 30 */
+{
+	"_id" : ObjectId("58b8ce2171e81b0001ece9ff"),
+	"prediction_made" : ISODate("2017-03-03T02:00:01.184Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 1.09
+		}
+	}
+}
+
+/* 31 */
+{
+	"_id" : ObjectId("58b8dc3171e81b0001ecea1a"),
+	"prediction_made" : ISODate("2017-03-03T03:00:01.172Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 0.83
+		}
+	}
+}
+
+/* 32 */
+{
+	"_id" : ObjectId("58b8ea4171e81b0001ecea35"),
+	"prediction_made" : ISODate("2017-03-03T04:00:01.159Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 0.59
+		}
+	}
+}
+
+/* 33 */
+{
+	"_id" : ObjectId("58b8f85171e81b0001ecea50"),
+	"prediction_made" : ISODate("2017-03-03T05:00:01.199Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 0.39
+		}
+	}
+}
+
+/* 34 */
+{
+	"_id" : ObjectId("58b9066171e81b0001ecea6b"),
+	"prediction_made" : ISODate("2017-03-03T06:00:01.250Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 0.9
+		}
+	}
+}
+
+/* 35 */
+{
+	"_id" : ObjectId("58b9147171e81b0001ecea86"),
+	"prediction_made" : ISODate("2017-03-03T07:00:01.176Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 3.02
+		}
+	}
+}
+
+/* 36 */
+{
+	"_id" : ObjectId("58b9228171e81b0001eceaa1"),
+	"prediction_made" : ISODate("2017-03-03T08:00:01.198Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 5.13
+		}
+	}
+}
+
+/* 37 */
+{
+	"_id" : ObjectId("58b9309171e81b0001eceabc"),
+	"prediction_made" : ISODate("2017-03-03T09:00:01.192Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 6.95
+		}
+	}
+}
+
+/* 38 */
+{
+	"_id" : ObjectId("58b93ea171e81b0001ecead7"),
+	"prediction_made" : ISODate("2017-03-03T10:00:01.207Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 8.13
+		}
+	}
+}
+
+/* 39 */
+{
+	"_id" : ObjectId("58b94cb171e81b0001eceaf2"),
+	"prediction_made" : ISODate("2017-03-03T11:00:01.250Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 8.91
+		}
+	}
+}
+
+/* 40 */
+{
+	"_id" : ObjectId("58b95ac171e81b0001eceb0d"),
+	"prediction_made" : ISODate("2017-03-03T12:00:01.302Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 8.7
+		}
+	}
+}
+
+/* 41 */
+{
+	"_id" : ObjectId("58b968d171e81b0001eceb28"),
+	"prediction_made" : ISODate("2017-03-03T13:00:01.229Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 8.71
+		}
+	}
+}
+
+/* 42 */
+{
+	"_id" : ObjectId("58b976e171e81b0001eceb43"),
+	"prediction_made" : ISODate("2017-03-03T14:00:01.250Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 8.37
+		}
+	}
+}
+
+/* 43 */
+{
+	"_id" : ObjectId("58b984f171e81b0001eceb5e"),
+	"prediction_made" : ISODate("2017-03-03T15:00:01.223Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 7.68
+		}
+	}
+}
+
+/* 44 */
+{
+	"_id" : ObjectId("58b9930171e81b0001eceb79"),
+	"prediction_made" : ISODate("2017-03-03T16:00:01.188Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 6.48
+		}
+	}
+}
+
+/* 45 */
+{
+	"_id" : ObjectId("58b9a11171e81b0001eceb94"),
+	"prediction_made" : ISODate("2017-03-03T17:00:01.301Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 4.8
+		}
+	}
+}
+
+/* 46 */
+{
+	"_id" : ObjectId("58b9af2171e81b0001ecebaf"),
+	"prediction_made" : ISODate("2017-03-03T18:00:01.213Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 3.71
+		}
+	}
+}
+
+/* 47 */
+{
+	"_id" : ObjectId("58b9bd3171e81b0001ecebca"),
+	"prediction_made" : ISODate("2017-03-03T19:00:01.213Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 2.73
+		}
+	}
+}
+
+/* 48 */
+{
+	"_id" : ObjectId("58b9cb4171e81b0001ecebe5"),
+	"prediction_made" : ISODate("2017-03-03T20:00:01.211Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 3.84
+		}
+	}
+}
+
+/* 49 */
+{
+	"_id" : ObjectId("58b9d95171e81b0001ecec00"),
+	"prediction_made" : ISODate("2017-03-03T21:00:01.193Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 2.96
+		}
+	}
+}
+
+/* 50 */
+{
+	"_id" : ObjectId("58b9e76171e81b0001ecec1b"),
+	"prediction_made" : ISODate("2017-03-03T22:00:01.380Z"),
+	"response" : {
+		"currently" : {
+			"temperature" : 0.66
+		}
+	}
+}
