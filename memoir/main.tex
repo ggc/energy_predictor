@@ -1,0 +1,144 @@
+\documentclass[a4paper,11pt]{book}
+\usepackage[spanish, activeacute]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{color,soul}
+\definecolor{gray97}{gray}{.97}
+\definecolor{gray75}{gray}{.75}
+\definecolor{gray45}{gray}{.45}
+\usepackage[colorlinks=true, linkcolor=black, urlcolor=blue, filecolor=blue]{hyperref}
+\usepackage{amsfonts}
+\usepackage{anysize}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsmath}
+\input{spanishAlgorithmic}
+
+\marginsize{3cm}{3cm}{2cm}{2cm}
+
+\usepackage{listings}
+\lstset{ frame=Ltb,
+framerule=0pt,
+aboveskip=0.5cm,
+framextopmargin=3pt,
+framexbottommargin=3pt,
+framexleftmargin=0.4cm,
+framesep=0pt,
+rulesep=.4pt,
+backgroundcolor=\color{gray97},
+rulesepcolor=\color{black},
+%
+stringstyle=\ttfamily,
+showstringspaces = false,
+basicstyle=\small\ttfamily,
+commentstyle=\color{gray45},
+keywordstyle=\bfseries,
+%
+numbers=left,
+numbersep=15pt,
+numberstyle=\tiny,
+numberfirstline = false,
+breaklines=true,
+%
+tabsize=4
+}
+
+\newcommand\mytitle{Desarrollo de modelos de predicción de la generación de energía eólica y solar para la optimización de Centros de Datos en un entorno de Smart Grid}
+\newcommand\myauthor{Gabriel Galán Casillas}
+\newcommand\myadvisorA{José Luis Ayala Rodrigo}
+\newcommand\myadvisorB{Marina Zapater Sancho}
+\newcommand\mydegree{Ingeniería Informatica}
+\newcommand\myyear{2017}
+\newcommand\mycourse{2016/2017}
+
+\title{Desarrollo de modelos de predicción de la generación de energía eólica y solar para la optimización de Centros de Datos en un entorno de Smart Grid}
+\author{\myauthor}
+\date{\today}
+\makeindex
+%\usepackage{graphicx}
+\begin{document}
+\baselineskip 1.5em     % 2em doble espacio, 1em espacio sencillo.
+
+%%% PORTADA %%%
+\titlepage{}
+\setlength{\unitlength}{1 cm} %Especificar unidad de trabajo
+
+\begin{center}
+\textbf{{\LARGE Universidad Complutense de Madrid}\\[0.5cm]}
+\textbf{
+{\Large Facultad de Informática}}\\[0.5cm]
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[height=5cm,]{images/logoucm.png}\\[1cm]
+\end{center}
+\end{figure}
+
+
+\textbf{\LARGE \mytitle}\\[4cm]
+\begin{tabular}{r l}
+\Large Alumno	& \Large \textbf{\myauthor}	\\[0.3cm]
+\Large Directores de proyecto	& \Large  \textbf{\myadvisorA} \\	
+                            & \Large  \textbf{\myadvisorB}
+\end{tabular}\\[4cm]
+{\large Trabajo de Fin de Grado}\\[0.3cm]
+{\large \mydegree}\\[0.3cm]
+{\large Junio de \myyear}
+\end{center}
+
+
+
+%%% ÍNDICE %%%
+\tableofcontents
+
+%%%Resumen y palabras clave %%%
+\chapter*{Palabras clave}
+\addcontentsline{toc}{chapter}{Palabras clave}
+\markboth{Palabras clave}{Palabras clave}
+
+\section*{Palabras clave en Español}
+\begin{itemize}
+\item Modelado y simulación
+\item Sistemas de eventos discretos
+\item Formalismo DEVS y xDEVS
+\item Raspberry Pi
+\item Módulos del kernel de Linux
+\item Circuitos lógicos y secuenciales
+\end{itemize}
+
+\section*{Keywords in English}
+\begin{itemize}
+\item Modeling and simulation
+\item Discrete events system
+\item DEVS formalism and xDEVS
+\item Raspberry Pi
+\item Linux kernel Modules
+\item Logic and sequential circuits
+\end{itemize}
+
+% Index
+\input{chapter-0}
+
+% Intro & obj
+\input{chapter-1}
+
+% Study
+\input{chapter-2}
+
+% Practice
+\input{chapter-3}
+
+% Results
+\input{chapter-4}
+
+% Closing
+\input{chapter-5}
+
+\input{bibliography}
+\input{chapter-ack}
+\input{chapter-aut}
+
+\end{document}
