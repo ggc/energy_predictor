@@ -1,8 +1,11 @@
-/*
-!.gitignore
-!/workspace
-!/src
-!/data_formatted
+/bundles
+/data_*
+/docs
+/graphs
+/misc
+/slprj
+notas.txt
+*~
 
 # Logs
 logs
