@@ -1,5 +1,5 @@
 function E_ewma = EWMA()
-    % Radiations sample (From AEMET) [ºC]
+    % Radiations sample (From AEMET) [ï¿½C]
 %     file = importdata('../data_formatted/Tamb_matrix.txt', '\t', 1);
 %     E = file.data;
     % Test sample
@@ -16,7 +16,7 @@ function E_ewma = EWMA()
 
     %% Constants
     % Weghting constant
-    a = 0.70;
+    a = 0.5;
 
     %% Algorithm ecuations
 
@@ -35,10 +35,9 @@ function E_ewma = EWMA()
     E_ewma_trans = E_ewma';
     E_trans = E';
     error = E_ewma_trans - E_trans;
-    std_deviation(1:D*T) = std(error(:));
-    figure
-    plot(1:D*T, error(:), 1:D*T, std_deviation(:));
-    figure
+%     figure
+%     plot(1:D*T, error(:));
+%     figure
     plot(1:T*D,E_ewma_trans(:), 1:D*T, E_trans(:));
 
 end

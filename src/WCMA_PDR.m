@@ -154,19 +154,43 @@ function Pred = WCMA_PDR()
     PDR = zeros(D, T);
     for day = 1:D
         for hour = 1:T
-            PDR(day,hour) = ( sum((PE(day,hour-W+1:hour)+PE(day,hour:hour+W-1))*y^(W-1)) )/sum(y^(1:W));
+            dividend = 0;
+            for wi = 0:W-1
+                dividend = dividend + (PE(day,mod(hour-wi,24)+1)+PE(day,mod(hour+wi,24)+1))*y^(W-1);
+            end
+            divisor = 0;
+            for wi = 0:W-1
+               divisor = divisor + y^(wi+1); 
+            end
+            PDR(day,hour) = dividend / divisor;
         end
     end
     
-    plot(1:D*T, PDR(:));
+%     plot(1:D*T, PDR(:));
+
+    E_pdr = zeros(D,T);
+    E_pdr(1,:) = Ppv(1,:);
+    for day = 2:D
+        for hour = 1:T
+            if(hour==1)
+                E_pdr(day,hour) = a*Ppv(day-1,T) + (1-a)*(sum(Ppv(1:day-1,hour))/(day-1));
+            else
+                disp([day, hour, GAP(to1d(day,hour))]);
+                E_pdr(day,hour) = a*Ppv(day,hour-1) + (1-a)*GAP(to1d(day,hour))*(sum(Ppv(1:day-1,hour))/(day-1)) + PDR(day,mod(hour,24)+1);
+            end
+        end
+    end
+%     plot(1:D*T, E_pdr(:), 1:D*T, Ppv(:));
+    
+    error = E_pdr - Ppv;
 %% Plot results
 %     Pred_trans = Pred';
 %     Ppv_trans = Ppv';
-%     
-%     errorGraph = figure;
-%     plot(1:336, error(:));
-%     
+%
 %     predvscurGraph = figure;
 %     plot(1:336, Pred_trans(:), 1:336, Ppv_trans(:));
+% 
+%     errorGraph = figure;
+    plot(1:D*T, error(:));
     
 end
