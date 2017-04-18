@@ -14,4 +14,5 @@ function E_cur = discretize_signals()
 %         E_pred(days, :) = Ppv_pred.signals.values(day_ini:ceil(samples_per_day/T):day_ini+samples_per_day);
         E_cur(days, :) = Ppv_cur.signals.values(day_ini+1:ceil(samples_per_day/T):day_ini+samples_per_day);
     end
+    assignin('base','E_cur', E_cur);
 end
