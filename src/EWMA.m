@@ -10,34 +10,32 @@ function E_ewma = EWMA()
     % Energy values from PV Matlab Model
     E = evalin('base','E_cur');
 
-
     D = size(E,1);
     T = size(E,2);
 
     %% Constants
     % Weghting constant
-    a = 0.5;
+    a = 0.75;
 
     %% Algorithm ecuations
-
+    % position seen as an array
+    to1d = @(d,t) (t-1)*D + d;
+    to2d = @(pos) [mod(pos-1,D)+1, fix((pos-1)/D)+1];
 
     %% Processing values
     % Initialize first predicted day with real values
     E_ewma = zeros(D,T);
     E_ewma(1,:) = E(1,:);
-    % Fill predicted values with Algorithm output
-    for d = 1:D-1
-        for t = 1:T
-            E_ewma(d+1,t) = a*E(d,t) + (1-a)*E_ewma(d,t);
-        end
-    end
 
+    for pos = 1:(D*T)-1
+        E_ewma(pos+1) = a*E(pos) + (1-a)*E_ewma(pos);
+    end
     E_ewma_trans = E_ewma';
     E_trans = E';
     error = E_ewma_trans - E_trans;
-%     figure
-%     plot(1:D*T, error(:));
-%     figure
+    figure
+    plot(1:D*T, error(:));
+    figure
     plot(1:T*D,E_ewma_trans(:), 1:D*T, E_trans(:));
 
 end

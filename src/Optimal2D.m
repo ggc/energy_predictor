@@ -1,12 +1,6 @@
 function E_o2d = Optimal2D()
-    % Radiations sample (From AEMET) [ºC]
-%     Tamb = importdata('../data_formatted/Tamb_matrix.txt', '\t', 1);
-%     D = size(Tamb.data,1);
-%     T = size(Tamb.data,2);
-
     E = evalin('base','E_cur'); % Real PV plant only knows current power
-%     file = importdata('../data_formatted/tested_sample.txt','\t',1);
-%     E = file.data;
+    
     D = size(E,1);
     T = size(E,2);
     W = 3; % Window size
@@ -28,14 +22,6 @@ function E_o2d = Optimal2D()
     % Fill predicted values with Algorithm output
     for d = 1:D
         for t = 1:T
-%             if (d == 2 && t == 5)
-%                 disp(['Hours D and T ',num2str(d),' ',num2str(t)]);
-%                 disp(prevHours(d,t));
-%                 disp('Days');
-%                 disp(prevDays(d,t));
-%                 disp('Values');
-%                 disp(prevValues(d,t));
-%             end
             x = prevValues(d,t);
             y = prevDays(d,t);
             z = prevHours(d,t);

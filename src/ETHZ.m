@@ -1,5 +1,5 @@
 function E_ethz = ETHZ() 
-    % Temperature sample (From AEMET) [ºC]
+    % Temperature sample (From AEMET) [ï¿½C]
     % For debugging
 %     Tamb_file = importdata('Tamb_matrix.txt', '\t', 1);
 %     Tamb_file = importdata('raw_data/temperature_matrix.json');
@@ -76,9 +76,9 @@ function E_ethz = ETHZ()
     E_ethz_trans = E_ethz';
     E_trans = E';
     error = E_ethz_trans - E_trans;
-    std_deviation(1:D*T) = std(error(:));
-    figure
+%     std_deviation(1:D*T) = std(error(:));
+    figure('name', 'curvspredFig');
     plot(1:T*D,E_ethz_trans(:), 1:D*T, E_trans(:));
-    figure
-    plot(1:D*T, error(:), 1:D*T, std_deviation(:));
+    figure('name', 'errorFig');
+    plot(1:D*T, error(:));
 end

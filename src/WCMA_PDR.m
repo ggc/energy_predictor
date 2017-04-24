@@ -1,4 +1,4 @@
-function Pred = WCMA_PDR()
+function WCMA_PDR()
     % Radiations sample (From AEMET) [�C]
 %     Tamb_file = importdata('../data_formatted/Tamb_matrix.txt', '\t', 1);
 %     Tamb = Tamb_file.data; %Tamb_t(time, day)
@@ -29,6 +29,7 @@ function Pred = WCMA_PDR()
     % P: The closer, the higher. Column
     function ret = P()
         ret = 1 - (K-(1:K)+1)/K;
+%         disp(ret);
     end
 
     % E: Weighted power
@@ -62,20 +63,26 @@ function Pred = WCMA_PDR()
             ret(1,k) = Vk(pos, k);
         end
     end
-    function ret = Vk(pos,k)
+    function ret = Vk(pos,k1)
         if(pos < 1)
             pos = pos + D;
         end
         x = to2d(pos);
         d = x(1);
         t = x(2);
-        if(t-k+1 < 1)
-            k = 1;
+        if(t-k1+1 < 1)
+            k1 = 1;
         end
-            sum_e = sum(E(1:d-1,t-k+1));
-%             disp(['sum_e']);
-%             disp([sum_e]);
-            ret = E(d,t-k+1)*( (d-1)/sum_e );
+        sum_e = sum(E(1:d-1,t-k1+1));
+%         disp('sum_e');
+%         disp(sum_e);
+%         disp('E(1:d-1,t-k+1)');
+%         disp(E(1:d-1,t-k1+1));
+        if(sum_e == 0)
+            ret = 0;
+        else
+            ret = E(d,t-k1+1)*( (d-1)/sum_e );
+        end
     end
 
     % GAP
@@ -83,11 +90,11 @@ function Pred = WCMA_PDR()
         v = V(pos);
         p = P();
         sum_p = sum(p);
-%         disp('v');
+%         disp('V');
 %         disp(v);
-%         disp('p');
+%         disp('P');
 %         disp(p);
-%         disp('sum p');
+%         disp('sum P');
 %         disp(sum_p);
         ret = v * (p / sum_p)';
     end
@@ -137,16 +144,16 @@ function Pred = WCMA_PDR()
     for hour = 1:T
         for day = 2:D
             % change error with sum and div like on E
-            disp(['current error: ', num2str(error(day,hour))]);
+%             disp(['current error: ', num2str(error(day,hour))]);
             pos = to1d(day,hour);
 %             todo
             if(pos-K+1 < 1) 
-                k = 1;
+                k1 = 1;
             else
-                k = K;
+                k1 = K;
             end
-            PE(day,hour) = s*PE( pos-1 ) + (1-s) * sum(error((pos-k+1):pos)) / (day-1);
-            disp(['PE:', num2str(PE(day,hour))]);
+            PE(day,hour) = s*PE( pos-1 ) + (1-s) * sum(error((pos-k1+1):pos)) / (day-1);
+%             disp(['PE:', num2str(PE(day,hour))]);
         end
     end
     plot(1:T*D, PE(:));
@@ -175,22 +182,19 @@ function Pred = WCMA_PDR()
             if(hour==1)
                 E_pdr(day,hour) = a*Ppv(day-1,T) + (1-a)*(sum(Ppv(1:day-1,hour))/(day-1));
             else
-                disp([day, hour, GAP(to1d(day,hour))]);
+%                 disp([day, hour, GAP(to1d(day,hour))]);
                 E_pdr(day,hour) = a*Ppv(day,hour-1) + (1-a)*GAP(to1d(day,hour))*(sum(Ppv(1:day-1,hour))/(day-1)) + PDR(day,mod(hour,24)+1);
             end
         end
     end
 %     plot(1:D*T, E_pdr(:), 1:D*T, Ppv(:));
     
-    error = E_pdr - Ppv;
 %% Plot results
-%     Pred_trans = Pred';
-%     Ppv_trans = Ppv';
-%
-%     predvscurGraph = figure;
-%     plot(1:336, Pred_trans(:), 1:336, Ppv_trans(:));
-% 
-%     errorGraph = figure;
+    E_pdr_t = E_pdr';
+    E_t = Ppv';
+    error = E_pdr_t - E_t;
+    plot(1:D*T, E_pdr_t(:), 1:(D*T), E_t(:));
+    figure;
     plot(1:D*T, error(:));
     
 end
