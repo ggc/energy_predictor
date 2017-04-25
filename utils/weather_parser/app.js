@@ -71,10 +71,10 @@ var findPreds = function(db, callback) {
 
     var cursor = collection.find({$and: [
             {"prediction_made": 
-                {$gte: new Date("2017-03-02")}
+                {$gte: new Date("2017-03-16")}
             },
             {"prediction_made": 
-                {$lt: new Date("2017-04-03")}
+                {$lt: new Date("2017-03-31")}
             }
         ]      
     });
@@ -118,10 +118,10 @@ mongo.connect(url, (err, db) => {
     findPreds(db, () => {
         console.log(t+' docs retrieved')
         // console.log('Temperatures', tempMatrix);
-        let fd_ir = fs.openSync('assets/ir.txt','w');
-        let fd_irpred = fs.openSync('assets/ir_pred.txt','w');
-        let fd_temp = fs.openSync('assets/temp.txt','w');
-        let fd_temppred = fs.openSync('assets/temp_pred.txt','w');
+        let fd_ir = fs.openSync('assets/ir_16-30.03.txt','w');
+        let fd_irpred = fs.openSync('assets/ir_pred_16-30.03.txt','w');
+        let fd_temp = fs.openSync('assets/temp_16-30.03.txt','w');
+        let fd_temppred = fs.openSync('assets/temp_pred_16-30.03.txt','w');
 
         fillValues();
 
@@ -137,11 +137,14 @@ mongo.connect(url, (err, db) => {
         fs.write(fd_temppred, JSON.stringify(tempPredMatrix), (err, written, string) => {
           // console.log('Temperature pred written');
         })
+        console.log('Closing files...')
         fs.closeSync(fd_ir);
         fs.closeSync(fd_irpred);
         fs.closeSync(fd_temp);
         fs.closeSync(fd_temppred);
+        console.log('Closing connection...')
         db.close();
+        console.log('Done');
     })
 })
 
