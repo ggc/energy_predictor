@@ -18,7 +18,7 @@ function E_ethz = ETHZ()
 
     %% Constants
     % Weghting constant
-    a = 0.75; b = 0.25; c = 0.85;
+    a = 0.2; b = 0.25; c = 0.85;
 
     %% Algorithm ecuations
     % position seen as an array
@@ -76,9 +76,16 @@ function E_ethz = ETHZ()
     E_ethz_trans = E_ethz';
     E_trans = E';
     error = E_ethz_trans - E_trans;
-%     std_deviation(1:D*T) = std(error(:));
-    figure('name', 'curvspredFig');
-    plot(1:T*D,E_ethz_trans(:), 1:D*T, E_trans(:));
-    figure('name', 'errorFig');
+    
+    figure();
     plot(1:D*T, error(:));
+    title('Error');
+    xlabel('Hous from start');
+    ylabel('W');
+    
+    figure();
+    plot(1:T*D,E_ethz_trans(:), 1:D*T, E_trans(:), '--k');
+    title('ETHZ vs Real');
+    xlabel('Hous from start');
+    ylabel('W');
 end

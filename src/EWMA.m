@@ -15,7 +15,7 @@ function E_ewma = EWMA()
 
     %% Constants
     % Weghting constant
-    a = 0.75;
+    a = .75;
 
     %% Algorithm ecuations
     % position seen as an array
@@ -25,17 +25,26 @@ function E_ewma = EWMA()
     %% Processing values
     % Initialize first predicted day with real values
     E_ewma = zeros(D,T);
-    E_ewma(1,:) = E(1,:);
 
-    for pos = 1:(D*T)-1
-        E_ewma(pos+1) = a*E(pos) + (1-a)*E_ewma(pos);
+    for d = 1:D-1
+        for t = 1:T
+            E_ewma(d+1, t) = a*E(d,t) + (1-a)*E_ewma(d,t);
+        end
     end
+    
     E_ewma_trans = E_ewma';
     E_trans = E';
     error = E_ewma_trans - E_trans;
     figure
     plot(1:D*T, error(:));
+    title('Error');
+    xlabel('Hous from start');
+    ylabel('W');
     figure
-    plot(1:T*D,E_ewma_trans(:), 1:D*T, E_trans(:));
+%   T*D/2
+    plot(1:T*D,E_ewma_trans(:), 1:(D*T), E_trans(:),'--k');
+    title('EWMA vs Real');
+    xlabel('Hours from start');
+    ylabel('W');
 
 end

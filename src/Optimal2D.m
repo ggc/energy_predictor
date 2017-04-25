@@ -67,10 +67,17 @@ function E_o2d = Optimal2D()
     
     E_o2d_trans = E_o2d';
     E_trans = E';
-    err = E_o2d_trans - E_trans;
-    std_deviation(1:D*T) = std(err(:));
-    figure
-    plot(1:T*D,E_o2d_trans(:), 1:D*T, E_trans(:));
-    figure
-    plot(1:D*T, err(:), 1:D*T, std_deviation(:));
+    err = E_o2d_trans - E_trans;    
+    
+    figure();
+    plot(1:D*T, err(:));
+    title('Error');
+    xlabel('Hous from start');
+    ylabel('W');
+    
+    figure();
+    plot(1:T*D,E_o2d_trans(:), 1:D*T, E_trans(:), '--k');
+    title('Optimal2D vs Real');
+    xlabel('Hous from start');
+    ylabel('W');
 end

@@ -1,5 +1,5 @@
 function E_wcma = WCMA()
-    % Radiations sample (From AEMET) [ºC]
+    % Radiations sample (From AEMET) [ï¿½C]
 %     Tamb_file = importdata('../data_formatted/Tamb_matrix.txt', '\t', 1);
 %     Tamb = Tamb_file.data; %Tamb_t(time, day)
 %     D = size(Tamb,1);
@@ -36,26 +36,26 @@ function E_wcma = WCMA()
             ret(1,k) = Vk(pos, k);
         end
     end
-    function ret = Vk(pos,k)
+    function ret = Vk(pos,k1)
         if(pos < 1)
             pos = pos + D;
         end
         x = to2d(pos);
         d = x(1);
         t = x(2);
-        if(t-k+1 < 1)
-            k = 1;
+        if(t-k1+1 < 1)
+            k1 = 1;
         end
-            sum_e = sum(E(1:d-1,t-k+1));
-%             if(sum_e<100)
-%                 disp(['sum_e and pos']);
-%                 disp([sum_e, pos]);
-%             end
-            if (sum_e > 0)
-                ret = E(d,t-k+1)*( (d-1)/sum_e );
-            else
-                ret = 1;
-            end
+        sum_e = sum(E(1:d-1,t-k1+1));
+%         disp('sum_e');
+%         disp(sum_e);
+        disp('E(1:d-1,t-k+1)');
+        disp(E(1:d-1,t-k1+1));
+        if(sum_e <= 0)
+            ret = 0;
+        else
+            ret = E(d,t-k1+1)*( (d-1)/sum_e );
+        end
     end
 
     % GAP
@@ -64,12 +64,12 @@ function E_wcma = WCMA()
         p = P();
         sum_p = sum(p);
 %         if(pos==147)
-%         disp('v');
-%         disp(v);
-%         disp('p');
-%         disp(p);
-%         disp('sum p');
-%         disp(sum_p);
+        disp('v');
+        disp(v);
+        disp('p');
+        disp(p);
+        disp('sum p');
+        disp(sum_p);
 %         end
         ret = v * (p / sum_p)';
     end
@@ -122,9 +122,16 @@ function E_wcma = WCMA()
     E_wcma_trans = E_wcma';
     E_trans = E';
     error = E_wcma_trans - E_trans;
-    std_deviation(1:D*T) = std(error(:));
-    figure
-    plot(1:T*D,E_wcma_trans(:), 1:D*T, E_trans(:));
-    figure
-    plot(1:D*T, error(:), 1:D*T, std_deviation(:));
+    
+    figure();
+    plot(1:D*T, error(:));
+    title('Error');
+    xlabel('Hous from start');
+    ylabel('W');
+    
+    figure();
+    plot(1:T*D,E_wcma_trans(:), 1:D*T, E_trans(:), '--k');
+    title('WCMA vs Real');
+    xlabel('Hous from start');
+    ylabel('W');
 end

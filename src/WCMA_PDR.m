@@ -193,8 +193,17 @@ function WCMA_PDR()
     E_pdr_t = E_pdr';
     E_t = Ppv';
     error = E_pdr_t - E_t;
-    plot(1:D*T, E_pdr_t(:), 1:(D*T), E_t(:));
-    figure;
+    
+    figure();
     plot(1:D*T, error(:));
+    title('Error');
+    xlabel('Hous from start');
+    ylabel('W');
+    
+    figure();
+    plot(1:T*D,E_pdr_t(:), 1:D*T, E_t(:), '--k');
+    title('WCMA_PDR vs Real');
+    xlabel('Hous from start');
+    ylabel('W');
     
 end
