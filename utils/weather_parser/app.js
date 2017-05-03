@@ -36,12 +36,16 @@ var irradiationMatrix = {};
 var tempPredMatrix = {};
 var irradiationPredMatrix = {};
 
+var windSpeedMatrix = {};
+var windBearingMatrix = {};
+
 var dayIrradiation = {};
 var dayTemperature = {};
 var dayIrradiationPred = {};
 var dayTemperaturePred = {};
 
 var url = 'mongodb://localhost/weather';
+// var url = 'mongodb://zeppelin.dacya.ucm.es/weather';
 
 var fillValues = function(){
     for (let d in irradiationMatrix){
@@ -61,6 +65,14 @@ var fillValues = function(){
             if( tempPredMatrix[''+d][''+t] === undefined){
                 console.log('day '+d+' hour '+t+' its empty');
                 t === 0 ? tempPredMatrix[''+d][''+t] = 0 : tempPredMatrix[''+d][''+t] = tempPredMatrix[''+d][''+(t-1)];
+            }
+            if( windSpeedMatrix[''+d][''+t] === undefined){
+                console.log('day '+d+' hour '+t+' its empty');
+                t === 0 ? windSpeedMatrix[''+d][''+t] = 0 : windSpeedMatrix[''+d][''+t] = windSpeedMatrix[''+d][''+(t-1)];
+            }
+            if( windBearingMatrix[''+d][''+t] === undefined){
+                console.log('day '+d+' hour '+t+' its empty');
+                t === 0 ? windBearingMatrix[''+d][''+t] = 0 : windBearingMatrix[''+d][''+t] = windBearingMatrix[''+d][''+(t-1)];
             }
         }
     }
@@ -88,11 +100,14 @@ var findPreds = function(db, callback) {
 
             if( !irradiationMatrix[date] ) irradiationMatrix[date] = {}
             if( !tempMatrix[date] ) tempMatrix[date] = {};
+            if( !windSpeedMatrix[date] ) windSpeedMatrix[date] = {};
+            if( !windBearingMatrix[date] ) windBearingMatrix[date] = {};
 
             // Take prediction [00-23] at start of the day
             if(time  == 0){
                 if( !irradiationPredMatrix[date] ) irradiationPredMatrix[date] = {}
                 if( !tempPredMatrix[date] ) tempPredMatrix[date] = {};
+
                 for (let d in doc.response.hourly.data) {
                     irradiationPredMatrix[date][d] = doc.response.hourly.data[d].cloudCover;
                     tempPredMatrix[date][d] = doc.response.hourly.data[d].temperature;
@@ -101,6 +116,8 @@ var findPreds = function(db, callback) {
 
             irradiationMatrix[date][time] = doc.response.currently.cloudCover;
             tempMatrix[date][time] = doc.response.currently.temperature;
+            windSpeedMatrix[date][time] = doc.response.currently.windSpeed;
+            windBearingMatrix[date][time] = doc.response.currently.windBearing;
             t++;
         }
         else{
@@ -123,6 +140,9 @@ mongo.connect(url, (err, db) => {
         let fd_temp = fs.openSync('assets/temp_16-30.03.txt','w');
         let fd_temppred = fs.openSync('assets/temp_pred_16-30.03.txt','w');
 
+        let fd_windspeed = fs.openSync('assets/windspeed_16-30.03.txt','w');
+        let fd_windbearing = fs.openSync('assets/windbearing_16-30.03.txt','w');
+
         fillValues();
 
         fs.write(fd_ir, JSON.stringify(irradiationMatrix), (err, written, string) => {
@@ -135,6 +155,13 @@ mongo.connect(url, (err, db) => {
           // console.log('Temperature written');
         })
         fs.write(fd_temppred, JSON.stringify(tempPredMatrix), (err, written, string) => {
+          // console.log('Temperature pred written');
+        })
+
+        fs.write(fd_windspeed, JSON.stringify(windSpeedMatrix), (err, written, string) => {
+          // console.log('Temperature pred written');
+        })
+        fs.write(fd_windbearing, JSON.stringify(windBearingMatrix), (err, written, string) => {
           // console.log('Temperature pred written');
         })
         console.log('Closing files...')
