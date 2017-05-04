@@ -44,8 +44,8 @@ var dayTemperature = {};
 var dayIrradiationPred = {};
 var dayTemperaturePred = {};
 
-var url = 'mongodb://localhost/weather';
-// var url = 'mongodb://zeppelin.dacya.ucm.es/weather';
+// var url = 'mongodb://localhost/weather';
+var url = 'mongodb://zeppelin.dacya.ucm.es:32789/weather';
 
 var fillValues = function(){
     for (let d in irradiationMatrix){
@@ -83,10 +83,10 @@ var findPreds = function(db, callback) {
 
     var cursor = collection.find({$and: [
             {"prediction_made": 
-                {$gte: new Date("2017-03-16")}
+                {$gte: new Date("2017-03-01")}
             },
             {"prediction_made": 
-                {$lt: new Date("2017-03-31")}
+                {$lt: new Date("2017-05-01")}
             }
         ]      
     });
