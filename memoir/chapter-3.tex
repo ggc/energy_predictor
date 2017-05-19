@@ -1,17 +1,19 @@
-\chapter{Experimentacion}
+\chapter{Experimentación}
 
-En este capitulo explicaremos todo el proceso de exprerimentacion, desde la recogida de datos hasta la obtencion de resultados
+\graphicspath{ {./graphs/} }
+
+En este capitulo explicaremos todo el proceso de exprerimentación, desde la recogida de datos hasta la obtención de resultados
 
 
 \section{Entorno}
-Para poder llevar a cabo unos resultados validos seria necesario tener una planta solar capaz de producir energia y la monitorizacion de esta. En este caso, dispondriamos de la potencia actual generada, la cual es la entrada a los algoritmos de prediccion.
+Para poder llevar a cabo unos resultados validos seria necesario tener una planta solar capaz de producir energía y la monitorización de esta. En este caso, dispondriamos de la potencia actual generada, la cual es la entrada a los algoritmos de predicción. 
 
-Simularemos este comportamiento con un proceso manual de recogida y procesado compuesto por una planta simulada con actuacion sobre historico.
-La temperatura y radiacion sera recopilada por un api rest, almacenada en una base de datos, extraida y formateada para ser introducida en el modelo de planta fotovoltaica de matlab.
-Tras ejecutar la simulacion, los valores de potencia resultantes seran pasados a los distintos modelos para obtener las predicciones.
+Dado que no es así, simularemos este comportamiento con un proceso manual de recogida y procesado de datos compuesto por una planta simulada con actuación sobre un historico.
+La temperatura y radiación sera recopilada por un api rest, almacenada en una base de datos, extraida y formateada para ser introducida en el modelo de planta fotovoltaica de matlab.
+Tras ejecutar la simulación, los valores de potencia resultantes seran pasados a los distintos modelos para obtener las predicciones.
 Una vez obtenidas las predicciones, seran contrastadas con los valores reales obteniendo asi graficas que prueben la certeza de estas.
 
-A continuacion se explican cada uno de los componentes del entorno.
+A continuahción se explican cada uno de los componentes del entorno.
 
 \begin{itemize}
     \item Preprocesado
@@ -25,26 +27,29 @@ A continuacion se explican cada uno de los componentes del entorno.
         \item Base de datos
         \item Modelo de planta solar
     \end{itemize}
-    \item Algoritmos de prediccion
+    \item Algoritmos de predicción
 \end{itemize}
 
 
-\subsection{RESTful API} % (fold)
+\subsection{RESTful API} 
 \label{sub:API}
-El primer paso para la puesta en marcha del modelo de planta solar es recoger los valores de radiacion y temperatura.
+El primer paso para la puesta en marcha del modelo de planta solar es recoger los valores de radiación y temperatura.
 
 Para la recogida de datos barajamos estas opciones:
 \begin{enumerate}
-    \item Estacion meteorologia de AEMET o similar
+    \item Estación meteorologia de AEMET con valores reales de su base de datos
     \item API publica
 \end{enumerate}
 
-Estacion meteorologica
 
-Primera opcion. Tiene puntos fuertes como proximidad, posibilidad de contacto y fiabilidad.
+\subsubsection{Estación meteorológica de AEMET}
+\label{ssub:estación_meteorológica_de_aemet}
+
+Fue nuetra primera opción por ser una base solida a la que tenemos acceso. Tiene puntos fuertes como proximidad, soporte técnico y fiabilidad.
+
 Los datos eran proporcionados en el siguiente formato:
 
-En la estacion meteorologica de Barajas
+En la estación meteorológica de Barajas
 
 \begin{table}[tb]
     \caption{caption here}
@@ -57,79 +62,82 @@ En la estacion meteorologica de Barajas
     \hline
     \textbf{column 1} & \textbf{column 2} & \textbf{column 3} \\
     \hline
-        shit & more shit & fuck off\\
+        value1 & value2 & value3\\
     \hline
 
     \hline
     \end{tabular}
 \end{table}
 
-% Indicativo: Indicativo climatológico
-% NOMBRE: Nombre estación
-% ALTITUD: Altitud de la estación (metros)
-% NOM_PROV: Provincia
-% LONGITUD: Longitud geografica
-% (La ultima cifra indica la orientacion: 1 para longitud E y 2 para W)
-% LATITUD: Latitud geografica
-% DATUM: Datum de referencia
+Indicativo: Indicativo climatológico
+NOMBRE: Nombre estación
+ALTITUD: Altitud de la estación (metros)
+NOM\_PROV: Provincia
+LONGITUD: Longitud geografica
+(La ultima cifra indica la orientación: 1 para longitud E y 2 para W)
+LATITUD: Latitud geografica
+DATUM: Datum de referencia
 
-% TOTSOL: Insolacion total diaria
-% PTJESOL: Porcentaje de insolacion
-% SOL07: Insolacion de 00 a 07
-% SOL13: Insolación de 07 a 13
-% SOL18: Insolación de 13 a 18
-% SOL00: Insolación de 18 a 24
+TOTSOL: Insolación total diaria
+PTJESOL: Porcentaje de insolación
+SOL07: Insolación de 00 a 07
+SOL13: Insolación de 07 a 13
+SOL18: Insolación de 13 a 18
+SOL00: Insolación de 18 a 24
 
-% Unidades y valores especiales:
+Unidades y valores especiales:
 
-% Horas UTC (Tiempo Universal Coordinado)
+Horas UTC (Tiempo Universal Coordinado)
 
-% Insolación en décimas de hora
+Insolación en décimas de hora
 
-% Porcentaje de insolación en % 
-
-% En la estacion de Cuidad Universitaria y El Retiro
-
-% Campos incluidos:
-% Indicativo: Indicativo climatolXgico
-% NOMBRE: Nombre estaciXn
-% ALTITUD: Altitud de la estaciXn (metros)
-% NOM_PROV: Provincia
-% LATITUD: Latitud geogrXfica
-% DATUM: Datum de referencia
-
-% TA: Temperatura del aire (XC)
-
-% Unidades y valores especiales:
-
-% Horas UTC (Tiempo Universal Coordinado)
-
-% Campos incluidos:
-% Indicativo: Indicativo climatolXgico
-% NOMBRE: Nombre estaciXn
-% ALTITUD: Altitud de la estaciXn (metros)
-% NOM_PROV: Provincia
-% LATITUD: Latitud geogrXfica
-% DATUM: Datum de referencia
-
-% VV10M: Velocidad media del viento (m/s)
-% DV10M: DirecciXn media del viento (X  (grados))
-% VMAX10M: Velocidad mXxima del viento (m/s)
-% DMAX10M: DirecciXn de la velocidad mXxima del viento (X  (grados))
-
-% Unidades y valores especiales:
-
-% Horas UTC (Tiempo Universal Coordinado)
+Porcentaje de insolación en
 
 
-Como se observa, la insolacion hace referencia la radiacion solar \textbf{porcentual} y solo esta disponible en Barajas.
+En la estacion de Cuidad Universitaria y El Retiro
+
+Campos incluidos:
+Indicativo: Indicativo climatológico
+NOMBRE: Nombre estación
+ALTITUD: Altitud de la estación (metros)
+NOM\_PROV: Provincia
+LATITUD: Latitud geogrXfica
+DATUM: Datum de referencia
+
+TA: Temperatura del aire (ºC)
+
+Unidades y valores especiales:
+
+Horas UTC (Tiempo Universal Coordinado)
+
+Campos incluidos:
+Indicativo: Indicativo climatológico
+NOMBRE: Nombre estación
+ALTITUD: Altitud de la estación (metros)
+NOM\_PROV: Provincia
+LATITUD: Latitud geográfica
+DATUM: Datum de referencia
+
+VV10M: Velocidad media del viento (m/s)
+DV10M: Dirección media del viento (º (grados))
+VMAX10M: Velocidad mXxima del viento (m/s)
+DMAX10M: Dirección de la velocidad máxima del viento (º (grados))
+
+
+
+Unidades y valores especiales:
+
+Horas UTC (Tiempo Universal Coordinado)
+
+
+Como se observa, la insolación hace referencia la radiación solar \textbf{porcentual} y solo esta disponible en Barajas.
 La temperatura en cambio solo esta disponible en Cuidad Universitaria y El Retiro.
 
 Queda excluida la base de datos de AEMET.
 
 API publica
 
-Descartada la opcion de estacion meteorologica, nos inclinamos por una API RESTful publica y gratuita que proporcionase los valores necesarios: Temperatura e Irradiacion ademas de Velocidad del viento y Direccion.
+Descartada la opción de estación meteorologica, nos inclinamos por una API RESTful publica y gratuita que proporciónase los valores necesarios: Temperatura e Irradiación ademas de Velocidad del viento y Dirección.
 
 Las opciones fueron:
 - Madrid AEMET opendata
@@ -163,17 +171,17 @@ Por lo tanto, el formato de las respuestas seria:
 [Copias schemas del server]
 
 
-\subsection{DB} % (fold)
+\subsection{DB} 
 \label{sub:DB}
 
 La base de datos se ha elegido como no relacional porque...[explicar otra vez]
 
-\subsection{Server} % (fold)
+\subsection{Server} 
 \label{sub:server}
 
 Habiendo elegido la fuente de datos, es necesario automatizar la recogida y su almacenado.
 
-Para ello se opto por una aplicacion creada con el framework nodejs y una base de datos mongo.
+Para ello se opto por una aplicación creada con el framework nodejs y una base de datos mongo.
 
 Nodejs porque es versatil y comodo de tratar javascript con el.
 MongoDB porque no es necesaria ningun tipo de estructura relacional en los datos.
@@ -186,35 +194,20 @@ Finalmente el servidor esta emplazado fisicamente en [la facultad de informatica
 
 
 
-\subsection{Extractor de datos} % (fold)
+\subsection{Extractor de datos} 
 \label{sub:extractor_de_datos}
 
 Una vez tenemos la base de datos con contenido sufuciente en continuo crecimiento, ya se puede proceder a extraer los datos de la base de datos y pasarselos al modelo de planta fotovoltaica de simulink para que proporcione una potencia de salida.
 
-Para ello, realizaremos una consulta a la base de datos y escribiremos los resultados en un archivo de texto que reconozca matlab y facilite su manipulacion.
+Para ello, realizaremos una consulta a la base de datos y escribiremos los resultados en un archivo de texto que reconozca matlab y facilite su manipulación.
 
 [Codigo explicado]
 
 
-
-\subsection{Simulink} % (fold)
-\label{sub:Simulink}
-
-El siguiente modelo simula una planta fotovoltaica de 100kW
-
-[Descripcion y argumentacion]
-
-
-\subsection{Modelos} % (fold)
-\label{sub:Modelos}
-
-Para el estudio se han probado los siguientes modelos.
-
-
-\subsection{Matlab} % (fold)
+\subsection{Matlab}
 \label{sub:Matlab} 
 
-Para la implementacion de los modelos se ha optado por usar matlab ya que a diferencia de C++ u otros lenguajes, tiene un toolbox de disenyo de redes neuronales muy completo y practico.
+Para la implementación de los modelos se ha optado por usar matlab ya que a diferencia de C++ u otros lenguajes, tiene un toolbox de disenyo de redes neuronales muy completo y practico.
 
 Lista de toolbox usados:
 - 
@@ -222,278 +215,160 @@ Lista de toolbox usados:
 
 
 
+\subsection{Simulink} 
+\label{sub:Simulink}
 
+El siguiente modelo simula una planta fotovoltaica de 100kW. 
 
-
-\section{Simulacion} % (fold)
-\label{sec:simulacion}
-
-\begin{itemize}
-\item Un conjunto de puertos de entrada, por donde se reciben los eventos de entrada al sistema.
-\item Un conjunto de puertos de salida, por donde se envían los eventos producidos en el modelo.
-\item Un conjunto de estados.
-\item Una función de avance de tiempo, que determinará la duración del estado actual.
-\item Una función de transición interna, que determina el estado al que debe pasar el sistema al finalizar el tiempo determinado por la función de avance de tiempo.
-\item Una función de transición externa, que determina el cambio a otro estado cuando se recibe una entrada. Es función de del estado actual, del puerto por el que se recibe la entrada, el valor recibido y el tiempo transcurrido en el estado actual.
-\item Una función de salida, que genera una salida inmediatamente antes de producirse una transición interna.
-\end{itemize}
-
-Un modelo DEVS atómico se especifica como:
-\begin{equation}\label{eq:DevsAtomic}
-M = \langle X,S,Y,\delta_{int} , \delta_{ext} , \lambda, ta\rangle
-\end{equation}
-
-\noindent donde:
-
-\begin{itemize}
-\item $X$ : Conjunto de eventos de entrada, formados por pares puerto-valor.	
-\item $S$ : Conjunto de estados secuenciales.
-\item $Y$ : Conjunto de eventos de salida, fomado por pares puerto-valor.
-\item $\delta_{int}$ : $S\rightarrow S$ , función de transición interna.
-\item $\delta_{ext}$ : $Q\times X\rightarrow S$ , función de transición externa, con
-\begin{equation}\label{eq:FullState}
-Q = \lbrace(s,t_e) | s\in S, t_e\in [0,\tau (s)]\rbrace
-\end{equation}
-\item $\lambda$ : $S\rightarrow Y$ , función de salida que dependerá de la duración del estado.
-%\item $\tau$ : $S\rightarrow \mathbb{R}^{+}_{0}$ , función de duración del estado.
-\item $ta$ : $S\rightarrow \mathbb{R}^{+}_{0}$ ,función de avance de tiempo.
-\end{itemize}
-
-En cualquier momento, el sistema se encuentra en un estado $s$. Si no se produce ningún evento de entrada, el sistema permanecerá en dicho estado $s$ durante un tiempo $ta(s)$. Si $ta(s)=0$, el estado se considera de transición, en el que no es posible que suceda ningún evento externo. Si, por el contrario, $ta(s)=\infty$, el sistema permanecerá en tal estado hasta que reciba algún evento externo; se denomina estado pasivo.
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[height=6cm,]{images/Atomico1.png}\\[0.5cm]
-Figura 2.1.1.a:Diagrama de tiempo del modelo atómico
-\end{center}
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{Ppv_diagram.png}
+    \caption{Diagrama de la planta fotovoltaica de 100kW conectada a una red}
+    \label{fig:Ppv_diagram}
 \end{figure}
 
-Cuando el tiempo transcurrido en un estado S supera a $ta(s)$, el sistema genera un evento de salida $\lambda(s)$, pasando al estado $s'=\delta_{int}(s)$, el estado de transición interna y sabemos que no se ha producido ningún evento externo durante el tiempo permanecido en el estado $s$.
 
-Si antes de producirse la transición interna ocurriera un evento externo con valor $x$, mientras el sistema se encuentra en el estado $(s,e)$, siendo $e \leq ta(s)$, el sistema pasaría al estado $\delta_{ext}(s,e,x)$, pero sin producirse ningún evento de salida.
-
-\subsection{Modelo Acoplado}
-
-Un modelo acoplado está constituído por un conjunto de modelos atómicos y/o acoplados, cuyas entradas y salidas se encuentran interconectadas entre ellos y con con el exterior del sistema.
-Un modelo acoplado N se define:
-\begin{equation}\label{eq:DevsAcoplado}
-N = \langle X,Y,D,\{M_{d}|d \in D\},EIC,EOC,IC\rangle
-\end{equation}
-
-\noindent donde:
-
+El modelo simula una planta fotovoltaica con las siguientes características:
 \begin{itemize}
-\item $X$ : Conjunto de eventos de entrada.	
-\item $D$ : Conjunto de los nombres de los componentes (atómicos o acoplados).
-\item $Y$ : Conjunto de eventos de salida.
-\item $M_{d}$ : modelo DEVS para cada $d \in D$.
-\item $EIC$ : conjunto de conexiones de entrada externas.
-\item $EOC$ : conjunto de conexiones de salida externas
-\item $IC$ : conjunto de conexiones internas.
+    \item f
 \end{itemize}
 
-\begin{figure}[H]
-\begin{center}
-\includegraphics[height=5cm,]{images/Acoplado1.png}
-\\[0.5cm]
-Figura 2.1.2.a: Modelo acoplado DEVS
-\end{center}
+Para llevar a cabo la simulación es necesario introducir las variables mas relevantes para el panel fotovoltaico: Radiación y Temperatura. Tiene como resultado la potencia instantanea en watios. El modelo evalua las entradas 1000 veces por segundo dando como resultado una detallada grafica de potencia producida.
+
+La importación y exportación de los valores se ha realizado desde el workspace, donde se pre y post procesan las señales resultantes: Las entradas (Radiación y Temperatura) se formatean de acuerdo a las entradas del modelo y las salidas (La potencia) se discretiza a valor por hora, ya que se evalua la potencia a un ratio de 1000 veces por 1 segundo de simulación.
+
+La quicena de potencia que usaremos es la descrita entre el hl{FECHAS AQUI}  y el eso. Se puede observar en la gráfica XX donde el eje x son los dias y el y la potencia generada en watios.
+
+El resultado de la simulación puede observarse en la siguiente figura:
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{Model_cur_outputs_010417.jpg}
+    \caption{Salida de la planta fotovoltaica}
+    \label{fig:Ppv_output}
 \end{figure}
 
-En el ejemplo se muestra el modelo acoplado N, con tres componentes M1, M2 y M3, que pueden ser a su vez atómicos o acoplados, y sus interconexiones mediante los correspondientes puertos de entrada y salida, así como las conexiones externas de entrada (EIC) y de salida (EOC).
+\subsection{Modelos}
+\label{sub:Modelos}
 
-La definición formal del modelo representado en la figura 2.1.2.a sería:
-\begin{equation}\label{eq:DevsAcoplado}
-N = \langle X,Y,D,\{M_{d}|d \in D\},EIC,EOC,IC\rangle
-\end{equation}
-
-\noindent donde:
+Para el estudio se han probado los siguientes modelos.
 
 \begin{itemize}
-\item $X$ = Conjunto de eventos de entrada.	
-\item $Y$ = Conjunto de eventos de salida.
-\item $D$ = $\{ M_{1},M_{2},M_{3} \}$.
-\item $M_{d}$ = $\{ M_{M1},M_{M2},M_{M3} \}$.
-\item $EIC$ = $\{ (N,in) \rightarrow (M_{1},in) \}$.
-\item $EOC$ = $\{ (M_{3},out) \rightarrow (N,out) \}$.
-\item $IC$ = $\{ (M_{1},out) \rightarrow (M_{2},in),(M_{2},out) \rightarrow (M_{3},in) \}$.
+    \item EWMA
+    \item Predictor for adaptive management from ETHZ
+    \item 2D linear predictor
+    \item Neural network
+    \item WCMA
+    \item WCMA-PDR
 \end{itemize}
 
+Para la experimentación se ha usado el mismo periodo de 15 dias, entre el 15 y el 30 de marzo del 2017.
 
-%\subsection {Acoplamiento Modular}
-
-%Un modelo Acoplado DEVS se define a partir de la siguiente estructura:
-%\begin{equation}\label{eq:DevsAcoplado}
-%N = \langle X_{N},Y_{N},D,\{M_{d}\},\{I_{d}\} , \{Z_{i,d}\} , Select\rangle
-%\end{equation}
-
-%\noindent donde:
-
-%\begin{itemize}
-%\item $X$ : Conjunto de valores de entrada del sistema acoplado.	
-%\item $Y$ : Conjunto de valores de salida del sistema acoplado.
-%\item $D$ : Conjunto de indices de referencias a los DEVS atomicos.\\
-%Esto quiere decir que si D=\{ d1,d2,d3 ...\} entonces por ejemplo \\
-%\begin{equation}\label{eq:DevsAtomicacoplado}
-%M_{d1} = \langle X_{d1},S_{d1},Y_{d1},\delta_{intd1} , \delta_{extd1} , \lambda_{d1}, \tau_{d1}\rangle 
-%\end{equation}
-%es una estructura que define un modelo atomico dentro del modelo acoplado DEVS.
-%\item $I_{d}$: es el conjunto de indices que referencia a modelos atomicos o el indice que referencia al modelo acoplado(que engloba a estos) que influyen sobre d dentro del sistema acoplado,es decir que: \[ d \notin I_{d} \]
-%\item Por cada i $\epsilon$ $I_{d}$ $Z_{i,d}$ es la funcion de de traduccion de salidas desde un componente atomico o acoplado a otro componente atomico o acoplado es decir: \\
-
-%$Z_{i,d}$ : $X_{N}\rightarrow X_{d}$ , si i = N.\\
-%$Z_{i,d}$ : $Y_{i}\rightarrow Y_{N}$ , si d = N.\\
-%$Z_{i,d}$ : $Y_{i}\rightarrow X_{d}$ , si d $\neq$ N y i $\neq$ N.\\
-
-%donde N es el indice que referencia al modelo acoplado.
+Los resultados mostrados a continuación se presentan como energía real producida más energía predicha y error entre ambas.
 
 
-%\item $Select$ : $D\rightarrow D$ esta es la funcion de desempate, esto es cuando un determinado subconjunto de componentes efectuan simultaneamente sus transiciones internas, la funcion select aplicada a determinados subconjuntos devuelve el elemento que transicione en primer lugar.\\
-%En donde D es un subconjunto de componentes.
+\subsubsection{EWMA}
+\label{ssub:ewma}
 
-%\end{itemize}
+En la gráfica se puede observar que usa los valores del dia anterior con una ligera atenuacion de la media de las predicciones pasadas. El nivel de error es alto durante el amanecer y el ocaso.
 
-%La interpretacion del acoplamiento es simple, cada modelo atomico es independiente de manera estructural, es decir que funcionan independientemente uno de otro, pero reciben entradas de algun componente o de la entrada del componente acoplado en si.Estos componentes que producen eventos de entrada a otros componentes se les denomina influyentes, generalmente los influyentes producen eventos de entrada que no son del mismo tipo que necesitan los componentes que los reciben, entonces para que estos componentes los puedan recibir se utiliza funciones de traduccion($Z_{i,d}$). 
+Horizonte de predicción: 24h
+$\alpha = TODO$
 
-%\subsection{Modelo Acoplado modular mediante puertos}
-%La especificacion formal del modelo acoplado DEVS con puertos:
-
-%\begin{equation}\label{eq:DevsAcoplado}
-%N = \langle X,Y,D,\{M_{d} \setminus d \epsilon  D\},EIC ,EOC , IC,Select\rangle
-%\end{equation},donde:
-
-%\begin{equation}\label{eq:DevsAcoplado}
-%X = \{ (p,x) \setminus p \epsilon Inport x \}
-%\end{equation}
-
-
-%\begin{equation}\label{eq:DevsAcoplado}
-%Y = \{ (p,y) \setminus p \epsilon Outport\}
-%\end{equation} \\
-
-%D es el conjunto de indices de referencias a los conjuntos.\\
-
-%Para cada d $\epsilon$ D,
-%\begin{equation}\label{eq:DevsAcoplado}
-%M{d} = (X_{d},Y_{d},S,\delta_{ext_{d}},\delta_{int_{d}},\lambda_{d},ta_{d})
-%\end{equation} \\
-
-
-
-\section{Construcción de modelos de data center}
-%Título temporal
-
-\subsection{Introducción}
-Un centro de procesamiento de datos es una instalación formada por múltiples servidores cuyos objetivos son el procesamiento, almacenamiento y acceso de datos. La propia definición de data center abarca tanto a los pequeños armarios de una oficina  como a las grandes granjas de servidores de empresas como Google. 
-%continuará...
-
-\subsection{Componentes de un data center}
-Los datacenters están conformados por un sistema de refrigeración, un sistema distribuido de servidores y, opcionalmente, un sistema de alimentación auxiliar.
-\begin{itemize}
-\item Sistemas de refrigeración: Un datacenter, al estar constituido por servidores, genera grandes cantidades de calor que, con los medios integrados de disipación de calor no son capaces de extraerlo, acumulandose en la estancia del CPD y afectando negativamente al rendimiento de las CPUs. Por esta razón se requiere un sistema adjunto que sea externo a los servidores y que retire el aire caliente que dichos servidores generan. Existen 2 tipos de sistemas de refrigeración externos a los servidores: 
-\begin{itemize}
-\item Refrigeración In-Rack: Se trata de un sistema de refrigeración líquida, con alto acoplamiento. Para cada agrupación de racks se le asigna una toma de entrada de agua fría, que se calentará a partir del aire caliente generado por los servidores del Rack, dando lugar a agua caliente que se irá de vuelta por el mismo circuito, como se muestrá en la figura 2.2.2.a.
-\begin{figure}[H]
-\begin{center}
-\includegraphics[height=8cm,]{images/inrack_cooling.PNG}
-\\[0.5cm]
-Figura 2.2.2.a:[1]
-\end{center}
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{EWMA.jpg}
+    \caption{EWMA Prediction accurancy}
+    \label{fig:ewma_comp}
 \end{figure}
-Los sistemas de refrigeración In-Rack requieren de 3 componentes externos a los Rack.
 
-\begin{enumerate}
-\item Bomba de agua: Se encarga de mover el agua caliente y el agua fría a través del circuito de refrigeración.
-\item Enfriador: El enfriador se encarga de enfriar el agua del circuito siempre que el intercambiador de calor no sea suficiente para enfriar el agua a la temperatura preestablecida recibida de la refrigeración de los servidores.
-\item Intercambiador de calor: Un intercambiador de calor es un sistema que permite que dos fluidos intercambien calor sin necesidad de mezclarse. Está formado por una una cámara que contiene uno de los fluidos y una bobina dentro de la cámara con el fluido a mayor temperatura. En el MGHPCC el fluido frío (a la temperatura del exterior) viene de la torre de refrigeración y el agua caliente viene de la refrigeración de la sala de servidores.
-\item Torre de refrigeración: El objetivo de la torre de refrigeración es evacuar el calor recibido del intercambiador de calor y condensar agua del aire para enviarlo al intercambiador de calor.
-
-\end{enumerate}
-
-\item Refrigeración mediante CRAC (Computer Room Air Conditioning): A diferencia de la refrigeración In-Rack, los data centers que usan CRAC no están acoplados a las fuentes de refrigeración. Los CRAC disponen de sistemas de aire acondicionado que actuan sobre toda la sala de servidores; depositan el aire frío en el suelo y una vez ahí, se elevan mediante unos ventiladores situados bajo la superficie del suelo. Mediante una rejilla expelen el aire frío a las tomas de aire frío de los Racks. 
-\end{itemize}
-\item Sistemas de TIC: Se encargan de realizar el trabajo de cómputo del CPD. 
-\item Sistemas de alimentación: Un CPD debe estar disponible en torno al 99\%  del tiempo, por ello exigen fuentes de alimentación auxiliares, para que en caso de que falle la Red eléctrica el CPD no se apague. Suelen estar conformados por baterías y/o generadores eléctricos de diesel o gasolina.
-\end{itemize}
-
-\subsection{DC-Simulator}
-DC-Sim nace como un proyecto para la simulación del consumo del MGHPCC (Massachusetts green high performance computing center) con el objetivo de ser una herramienta para la investigación en técnicas de reducción del consumo en los centros de procesado de datos.
-
-La finalidad de DC-Sim es conseguir los datos de consumo de un centro de procesado de datos a partir de la topología de dicho CPD, una serie de tareas y los valores de la temperatura ambiental. Existen dos posibilidades de funcionamiento en DC-Sim:
-\begin{itemize}
-\item Funcionamiento estático: Como su propio nombre indica, el funcionamiento estático sólo obtiene el consumo para un tiempo determinado. Se comporta como el funcionamiento dinámico para una única iteración.
-\begin{figure}[H]
-\begin{center}
-\includegraphics[height=4cm,]{images/ResumenSimEstat.jpg}
-\\[0.5cm]
-Figura 2.2.3.a
-\end{center}
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{EWMA_error.jpg}
+    \caption{EWMA Prediction error}
+    \label{fig:ewma_error}
 \end{figure}
-\item Funcionamiento dinámico: La simulación dinámica supone que el sistema evoluciona en función del tiempo, es decir, la temperatura a la que se ejecuta la simulación varía en función de un archivo de temperaturas y se van agregando y terminando tareas en los servidores a lo largo de dicha ejecución.
-\begin{figure}[H]
-\begin{center}
-\includegraphics[height=4cm,]{images/ResumenSim.jpg}
-\\[0.5cm]
-Figura 2.2.3.b
-\end{center}
+
+
+\subsubsection{Adaptive power management (del ETHZ)}
+ \label{ssub:adaptive_power_management}
+
+El resultado de este tipo de predictor es muy similar al EWMA ya que realiza un cálculo basculado de el valor del dia anterior, pero sutilmente mejorado ya que tambien añade a la predicción los valores inmediatamente anteriores. El error en este caso es mas pronunciado en los extremos del dia pero mas estable en los puntos de irradiación estable.
+
+Horizonte de predicción: 24h
+$\alpha = TODO$
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{ETHZ.jpg}
+    \caption{ETHZ Prediction accurancy}
+    \label{fig:ethz_comp}
 \end{figure}
-\end{itemize}
-Las fases de ambos tipos de simulaciones se resumen en:
-\begin{itemize}
-\item Configuración: A partir de los datos del archivo de topología se construyen los modelos de los sistemas con los que trabaja el simulador, es decir la refrigeración y la sala de servidores; además se configuran algunos parámetros como los tiempos de inicio y de llegada de los trabajos.
-\item Asignación de tareas: Esta tarea sólo esta disponible en modo dinámico y se encarga de asignar las tareas de un archivo a un servidor. La información de las tareas en el archivo es: su servidor objetivo, el tiempo durante el cual sé ejecutarán y cómo modifican el consumo dinámico de las CPUs y las memorias.
-\item Política de refrigeración: Esta etapa se encarga de modificar algunos parámetros de consumo, según sea la política de enfriamiento empleada.
-\item Cálculo de consumo de energía: Esta fase ejecuta la lógica relacionada con el consumo y  devuelve los valores de potencia y energía para un momento determinado.
-\end{itemize}
-\subsection{Implementación de los modelos de consumo en DC-Sim}
-El simulador actual dispone de un modelo para cada uno de los elementos de consumo eléctrico de un data center refrigerado por un sistema de refrigerado In-Rack:
 
-El modelo de consumo de data center considera la contribución de los $k_{1}$ IRCs, los $k_{2}$ servidores y el sistema de refrigeración(enfriador, bomba de agua y torre de refrigeración). LA ecuación del modelo de datacenter sería:
-\begin{equation}
-P_{DataCenter}=\displaystyle\sum_{n=0}^{k_{2}} P_{server,n} + \displaystyle\sum_{n=0}^{k_{1}} P_{IRC,n}+P_{chiller} +P_{pump} +P_{CoolingTower}
-\end{equation}
-
-\begin{itemize}
-\item Servidor: El modelo de consumo de un servidor está definido por la suma de potencias:
-\begin{equation}
-P_{server}=P_{idle} + P_{cpu,dyn} + P_{leakeage} +P_{fan} + P_{mem,dyn}
-\end{equation}
-Siendo $P_{idle}$ la potencia correspondiente a la cpu, el disco y las memorias en idle; $P_{cpu,dyn}$ y $P_{mem,dyn}$ los incrementos de  consumo de potencia de la CPU y la memoria, respectivamente, al realizar una tarea; $P_{leakeage}$ será el consumo extra de potencia derivado del descenso de rendimiento por temperatura; y el $P_{fan}$ vendrá de la potencia usada por el ventilador. Cabe recordar que estos valores variarán en función de las tareas y el servidor empleados.
-\item Refrigerador In-Rack (IRC): El consumo de potencia del IRC es función cúbica con relación al flujo de aire que recibe de los servidores, ya que debe extraer el calor de  dicho flujo de aire mediante la ventilación del IRC y la circulación de agua fría. La ecuación del consumo de potencia del IRC es:
-\begin{equation}
-P_{IRC}=\alpha_{3}*airflow^{3}+\alpha_{2}*airflow^{2}+\alpha_{1}*airflow+\alpha_{0}
-\end{equation}
-Siendo $airflow$ la suma del flujo de aire de los servidores refrigerados por el IRC correspondiente, y  $\alpha_{3}$, $\alpha_{2}$, $\alpha_{1}$, $\alpha_{0}$ coeficientes de la ecuación y específicos del IRC en cuestión.
-\item Enfriador, torre de refrigeración y bomba de agua: El modelo de consumo del sistema de refrigeración tendrá en cuenta la temperatura exterior. Si ésta es suficientemente baja se aplica el modelo de consumo Free Cooling, en el que $P_{chiller}=0$;  el $P_{CoolingTower}$ se obtiene de una LUT creada a partir de las datasheets facilitadas por el fabricante. Si no se pudiese aplicar una política de Free Cooling, $P_{chiller}$ vendra dado por las siguiente ecuación:
-\begin{equation}
-P_{chiller}={Q_{evap} \over COP_{chiller}}
-\end{equation}
-siendo $Q_{evap}$ el sumatorio del calor generado por los servidores enfriados por cada IRC. $COP_{chiller}$ es el coeficiente de  rendimiento del enfriador:
-
-\begin{equation}
-COP_{chiller}={T_{evap} \over T{cond}-T_{evap}}
-\end{equation}
-donde $T_{evap}$ es la temperatura del agua en el evaporador y $T_{cond}$ la temperatura en el condensador.
-Finalmente, $P_{pump}$ es proporcional al flujo de agua del IRC y al cambio de presión  e inversamente proporcional a la eficiencia de la bomba:
-\begin{equation}
-P_{pump}={f_{IRCwater}*\Delta P \over \epsilon_{pump}}
-\end{equation}
-
-\end{itemize}
-
-\subsection{DC-Simulator en xDEVS}
-El objetivo de trasladar DC-Sim a DEVS es la formalización de un simulador previamente realizado ad-hoc a un modelo. Las ventajas de esta reformalización son:
-\begin{enumerate}
-\item Facilidad de comunicación con otros sistemas DEVS.
-\item Sustancial mejora de la gestión del tiempo para los eventos de simulación.
-\item Posibilidad de paralelización de los eventos, con la consecuente reducción del tiempo de ejecución en topologías con excesiva carga de trabajo.
-\end{enumerate}
-En el nuevo diseño para DEVS los elementos de consumo de DC-Sim han sido sustituidos por componentes de DEVS. Cada cnuevo componente dispone de puertos para comunicar la información que se intercambiaban en DC-Sim. La figura 2.2.5.a representa un boceto de la estructura en DEVS.%Este punto se desarrollará en el siguiente capítulo, esto es solo una introducción
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[height=10cm,]{images/COLOR_1.jpg}
-\\[0.5cm]
-Figura 2.2.5.a: Estructura DEVS
-\end{center}
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{ETHZ_error.jpg}
+    \caption{ETHZ Prediction error}
+    \label{fig:ethz_error}
 \end{figure}
+
+
+\subsubsection{Optimal 2D prediction filter} 
+\label{ssub:optimal_2d_prediction_filter}
+
+
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{Optimal2D.jpg}
+    \caption{2D filter Prediction accurancy}
+    \label{fig:o2d_comp}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{Optimal2D_error.jpg}
+    \caption{2D filter Prediction error}
+    \label{fig:o2d_error}
+\end{figure}
+
+
+\subsubsection{WCMA} 
+\label{ssub:wcma}
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{WCMA.jpg}
+    \caption{WCMA Prediction accurancy}
+    \label{fig:wcma_comp}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{WCMA_error.jpg}
+    \caption{WCMA Prediction error}
+    \label{fig:wcma_error}
+\end{figure}
+
+
+\subsubsection{WCMA with PDR} 
+\label{ssub:wcma_with_pdr}
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{WCMA-PDR.jpg}
+    \caption{WCMA with PDR Prediction accurancy}
+    \label{fig:wcmapdr_comp}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{WCMA-PDR_error.jpg}
+    \caption{WCMA with PDR Prediction error}
+    \label{fig:wcmapdr_error}
+\end{figure}
+
+
+\subsubsection{Red neuronal artificial} 
+\label{ssub:nn}
+
+El resultado de la red neuronal es especialmente bueno si consideramos valores estables, pero el tiempo de procesado y aprendizaje (El cual deberá ser continuo)
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{nn.jpg}
+    \caption{neural network Prediction accurancy}
+    \label{fig:nn_comp}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{nn_error.jpg}
+    \caption{neural network Prediction error}
+    \label{fig:nn_error}
+\end{figure}
+
