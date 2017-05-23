@@ -1,6 +1,6 @@
 function signal_builder_v2
     %% Irradiation
-    ir_file = importdata('../data_formatted/ir_16-30.03.txt');
+    ir_file = importdata('../data_formatted/ir_2017-04-16.txt');
     ir_file = jsondecode(ir_file{1});
 
     fields = fieldnames(ir_file);
@@ -15,6 +15,8 @@ function signal_builder_v2
 
     ir_file = (1-m)*1000;
 
+    
+    % sunrise at 7. dawn at 21
     ir_file(1:5,:) = 0;
     ir_file(6,:) = ir_file(6,:)/2;
     ir_file(21:T,:) = 0;
@@ -25,7 +27,7 @@ function signal_builder_v2
 
     %% Temperature
 
-    temp_file = importdata('../data_formatted/temp_16-30.03.txt');
+    temp_file = importdata('../data_formatted/temp_2017-04-16.txt');
     temp_file = jsondecode(temp_file{1});
 
     fields = fieldnames(temp_file);

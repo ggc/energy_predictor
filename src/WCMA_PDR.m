@@ -15,9 +15,9 @@ function WCMA_PDR()
     a = 0.99;
     s = 0.75;
     y = 0.25;
-    K = 3;
-    W = 3;
-
+    K = 12;
+    W = 24;
+    Ad= .60;
     
     %% Algorithm ecuations
     % position seen as an array
@@ -34,7 +34,7 @@ function WCMA_PDR()
 
     % E: Weighted power
     E = zeros(D,T);
-    E(1,:) = Ppv(1,:);
+%     E(1,:) = Ppv(1,:);
     function [] = Es()
         for d = 2:D
             for t = 1:T
@@ -169,14 +169,14 @@ function WCMA_PDR()
             for wi = 0:W-1
                divisor = divisor + y^(wi+1); 
             end
-            PDR(day,hour) = dividend / divisor;
+            PDR(day,hour) = (dividend * Ad)/ divisor;
         end
     end
     
 %     plot(1:D*T, PDR(:));
 
     E_pdr = zeros(D,T);
-    E_pdr(1,:) = Ppv(1,:);
+%     E_pdr(1,:) = Ppv(1,:);
     for day = 2:D
         for hour = 1:T
             if(hour==1)
@@ -202,7 +202,7 @@ function WCMA_PDR()
     
     figure();
     plot(1:T*D,E_pdr_t(:), 1:D*T, E_t(:), '--k');
-    title('WCMA_PDR vs Real');
+    title('WCMA\_PDR vs Real');
     xlabel('Hous from start');
     ylabel('W');
     
