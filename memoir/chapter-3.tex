@@ -209,7 +209,7 @@ Para ello, realizaremos una consulta a la base de datos y escribiremos los resul
 
 Para la implementación de los modelos se ha optado por usar matlab ya que a diferencia de C++ u otros lenguajes, tiene un toolbox de disenyo de redes neuronales muy completo y practico.
 
-Lista de toolbox usados:
+Lista de herramientas usadas:
 - 
 
 
@@ -229,14 +229,18 @@ El siguiente modelo simula una planta fotovoltaica de 100kW.
 
 El modelo simula una planta fotovoltaica con las siguientes características:
 \begin{itemize}
-    \item f
+    \item 100kW a 1000$W/m^2$
+    \item Conectada a una red de 25kV de tres fases
+    \item Conexión DC-DC con amplificador de tensión
+    \item 1980-Hz con VSC de 3-niveles y 3-fases
+    \item Condensador de 10kvar para el filtrado
 \end{itemize}
 
 Para llevar a cabo la simulación es necesario introducir las variables mas relevantes para el panel fotovoltaico: Radiación y Temperatura. Tiene como resultado la potencia instantanea en watios. El modelo evalua las entradas 1000 veces por segundo dando como resultado una detallada grafica de potencia producida.
 
 La importación y exportación de los valores se ha realizado desde el workspace, donde se pre y post procesan las señales resultantes: Las entradas (Radiación y Temperatura) se formatean de acuerdo a las entradas del modelo y las salidas (La potencia) se discretiza a valor por hora, ya que se evalua la potencia a un ratio de 1000 veces por 1 segundo de simulación.
 
-La quicena de potencia que usaremos es la descrita entre el hl{FECHAS AQUI}  y el eso. Se puede observar en la gráfica XX donde el eje x son los dias y el y la potencia generada en watios.
+La quicena de potencia que usaremos es la descrita entre el 1 y el 16 de abril. Se puede observar en la gráfica \ref{fig:Ppv_output} donde el eje x son los dias y el y la potencia generada en watios.
 
 El resultado de la simulación puede observarse en la siguiente figura:
 
@@ -255,9 +259,10 @@ Para el estudio se han probado los siguientes modelos.
     \item EWMA
     \item Predictor for adaptive management from ETHZ
     \item 2D linear predictor
-    \item Neural network
     \item WCMA
     \item WCMA-PDR
+    \item Neural network
+    \item N4SID
 \end{itemize}
 
 Para la experimentación se ha usado el mismo periodo de 15 dias, entre el 15 y el 30 de marzo del 2017.

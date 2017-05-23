@@ -19,7 +19,7 @@ Si por ejemplo tenemos Abril y predecimos Mayo, contrastaremos los datos de Mayo
 \label{sec:solar}
 
 La prediccion energetica solar esta muy avanzada a dia de hoy, existen modelos teoricos, tanto probados en entornos cerrados como casos reales. 
-En este proyecto nos centraremos en llevar a la practica modelos teoricos
+En este proyecto nos centraremos en llevar a la practica modelos teoricos autoregresivos.
 
 
 \subsection{Modelos de predicción} 
@@ -44,33 +44,29 @@ La energia pronosticada en un momento t y dia d sera la suma de la energia medid
 
 En esencia, el algoritmo usa el historico de los dias anteriores para predecir el siguiente. Si la constante $\rho$ esta mas cerca del 1, el pronostico tendera a ser el valor del dia anterior. Sin embargo, si $\rho$ es mas proxima al 0, se explotara el registro acumulado. 
 
-\hl{
-Pros: Bajo procesamiento y consumo de memoria
+Pros: Bajo procesamiento y consumo de memoria\\
 Cons: Prediccion muy simple sin control de errores
-}
 
 
 \subsubsection{ Predictor for adaptive management developed at ETHZ} 
 \label{ssub:subsubsection_name}
 
-Este modelo de prediccion 
+Este modelo de predicción combina la predicción a corto plazo(horas) con largo plazo(días).
 
 \begin{align}
-	E_{S}(t) &= min( (1-\gamma) E_{N}(t) + (\gamma) R_{t}, E_N(t) ) \\
+	E_S(t) &= min( (1-\gamma) E_N(t) + (\gamma) R(t), E_N(t) ) \\
 	R(t) &= \beta R(t-1) + (1-\beta) E_S(t-1) \\
 	E_N(t) &= \alpha E_N(t-1) + (1-\alpha) E_S(t-1)
 \end{align}
 
-Siendo Es~ la energia producida por el modelo siendo ,
-Es es la energia real producida por el pv,
-En es la energia promedio medida en T ultimas muestras con factor $\alpha$
+$E_S$ es la energia real producida por la planta fotovoltaica,\\
+$E_N$ es la energia promedio medida en T ultimas muestras con factor $\alpha$
 Finalmente R es el promedio a corto plazo con factor $\beta$
 
 Este algoritmo se basa en el mismo principio que el EWMA separando el corto plazo del largo plazo.
-\hl{
-Pros: Tiene mejor factor de prediccion a corto plazo que el EWMA
+
+Pros: Tiene mejor factor de prediccion a corto plazo que el EWMA \\
 Cons: Sigue sin filtrar variaciones habituales y no es inmune a imprevistos
-}
 
 
 \subsubsection{ Optimal 2D linar prediction filter} 
@@ -88,6 +84,55 @@ Este seria un ejemplo para tamanyo de ventana K = 2
 	X'_{i+1,j+1} &= a_1 X_{i,j} + a_2 X_{i,j+1} + a_3 X_{i+1,j}
 \end{align}
 
+Para tamaño de ventana superior simplemente sumar la colunma multiplicada por $a_1$ y dividida por K. Lo mismo con la fila y con la submatriz que queda de quitar la fila y columna.
+
+Pros: Toma valores del historico para \\
+Cons: Igual que EWMA o ETHZ, no tiene control de errores ni modifica las variables dinamicamente.
+
+
+\subsubsection{ Weather Conditioned Moving Average} 
+\label{ssub:subsubsection_name}
+
+El algoritmo mas explotado en la literatura, WCMA, tiene sus bases en el EWMA con el valor añadido de que tiene una visión global del periodo y control de cambios.
+
+
+
+\begin{align}
+	E_{(d,n+1)} &= \alpha E_{(d,n)} + (1-\alpha) \frac  {\sum_{i=1}^D E_{i,n+1}} {D} \\
+	v^{d,n}_k &= E_{(d,n-k+1)} \frac {D}{\sum^D_i=1} E_{i,n-k+1} \\
+	p_k &= 1-\frac {K-k+1}{K} \\
+	GAP_k^{d,n} &= V^{d,n}(K) \times \big(P(K) / \sum P(K) \big)^T \\
+	E^{GAP}_{d,n+1} &= \alpha E_(d,n) + (1-\alpha) GAP_K^{d,n} \frac{\sum^D_{i=1} E_{i,n+1}}{D}
+\end{align}
+
+$E_{(d,n+1)}$ esta es la energía calculada siguiendo el mismo estilo que EWMA. \\
+Con $v^{d,n}_k$ se obtiene la mejora de las condiciones a lo largo de un periodo k previamente definido. Si v > 1 se considera que las condiciones del momento n del dia d son mejores que los dias anteriores. Iguales o peores en otro caso. \\ 
+$p_k$ es un vector de longitud k cuyo objetivo es dar mas importancia a los valores mas cercanos al momento actual. Esto se consigue con un vector creciente entre 0 y 1 que representa una recta creciente. e.g. [0, 0.33, 0.66, 1] \\
+$GAP_k^{d,n}$ es el valor clave del algoritmo. Como se ve en la fórmula, contiene V y P. De esto se concluye que GAP representa la cantidad de energía de más o de menos que hay actualmente, ya que compara el momento actual con los valores anteriores, cuantificados con P (valor más cercano al actual, mas peso) dando como resultado > 1 si hay más energía disponible o < 1 si hay menos. \\
+Finalmente $E^{GAP}_{d,n+1}$ es el resultado de la predicción.
+
+
+Pros: Permite tener constancia de los cambios mas recientes gracias a la $v^{d,n}_k$ \\
+Cons: Si no se tiene control de posibles valores negativos ()
+
+
+\subsubsection{ Weather Conditioned Moving Average with Phase Displacement Regulator} 
+\label{ssub:subsubsection_name}
+
+Esta mejora del algoritmo incluye la variable PDR que permite seguir el rastro de los errores adem
+
+\begin{align}
+	PE(d,i) &= \delta PE(d-1,i) + (1-\delta) \frac  {\sum_{i=1}^D PE_{i,n+1}} {D} \\
+	PDR_{d,n} &= \bigg[ \frac{\sum^{w-1}_{w_i = 0} [ PE(n-w_i) + PE(n+w_i) ] \gamma^{(w_i + 1)}}{\sum_{w_i = 0}^{w - 1} \gamma^{(w_i + 1)}} \bigg] \\
+	E^{PDR}_(d,n+1) &= \alpha E_{d,n} + (1-\alpha ) GAP^{d,n}_K \frac{\sum^D_{d,n} E_{i,n+1} }{D} + PDR_{d,n+1}
+\end{align}
+
+$PE(d,i)$ representa el error en cada momento, basculado con los errores pasados. \\
+$PDR_{d,n}$ es el valor final que regula la salida del algoritmo. Toma como valor clave PE, más concretamente, un PE con tamaño de venta 2w (los w PE anteriores y w PE siguientes). Esto permite equilibrar el error entre los que le rodean. 
+
+Pros: Tiene control del error pasado \\
+Cons: Necesita un registro importante de valores para ajustarse bien
+
 
 \subsubsection{ Neural network prediction} 
 \label{ssub:subsubsection_name}
@@ -99,33 +144,8 @@ La red neuronal estara disenyada con 2 capas de 8 neuronas y funcion sigmoidal $
 
 El entrenamiento sera con el algoritmo de regularizacion Bayesiana, que mejorara el rendimiento con ruido, y con propagacion hacia atras, asi que las salidas conectaran con las salidas.
 
-
-
-
-\subsubsection{ Weather Conditioned Moving Average} 
-\label{ssub:subsubsection_name}
-
-El algoritmo mas explotado en la literatura, WCMA, tiene sus bases en el EWMA con el valor anyadido de que tiene una vision global del periodo y control de cambios 
-
-\begin{align}
-	E_{(d,n+1)} &= \alpha E_{(d,n)} + (1-\alpha) \frac  {\sum_{i=1}^D E_{i,n+1}} {D} \\
-	v^{d,n}_k &= E_{(d,n-k+1)} \frac {D}{\sum^D_i=1} E_{i,n-k+1} \\
-	p_k &= 1-\frac {K-k+1}{K} \\
-	GAP_k^{d,n} &= V^{d,n}(K) \times \big(P(K) / \sum P(K) \big)^T \\
-	E^{GAP}_{d,n+1} &= \alpha E_(d,n) + (1-\alpha) GAP_K^{d,n} \frac{\sum^D_{i=1} E_{i,n+1}}{D}
-\end{align}
-
-
-
-\subsubsection{ Weather Conditioned Moving Average with Phase Displacement Regulator} 
-\label{ssub:subsubsection_name}
-
-
-\begin{align}
-	PE(d,i) &= \delta PE(d-1,i) + (1-\delta) \frac  {\sum_{i=1}^D PE_{i,n+1}} {D} \\
-	PDR_{d,n} &= \bigg[ \frac{\sum^{w-1}_{w_i = 0} [ PE(n-w_i) + PE(n+w_i) ] \gamma^{(w_i + 1)}}{\sum_{w_i = 0}^{w - 1} \gamma^{(w_i + 1)}} \bigg] \\
-	E^{PDR}_(d,n+1) &= \alpha E_{d,n} + (1-\alpha ) GAP^{d,n}_K \frac{\sum^D_{d,n} E_{i,n+1} }{D} + PDR_{d,n+1}
-\end{align}
+Pros: Puede reaccionar y predecir mejor ante situaciones inesperadas \\
+Cons: Requiere un entrenamiento continuo. Consume muchos recursos
 
 
 \subsubsection{n4sid}
@@ -166,7 +186,6 @@ La predicción de energía eólica es mucho mas compleja que la solar ya que la 
 Abordaremos la predicción de energía eólica de 3 maneras:
 \begin{itemize}
 	\item Modelo ARIMA
-	\item Red neuronal artificial
 	\item n4sid
 \end{itemize}
 
