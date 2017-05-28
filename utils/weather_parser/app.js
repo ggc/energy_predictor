@@ -30,6 +30,8 @@ app.use('/users', users);
 
 
 var t = 0;
+var dateIni = "2017-04-16";
+var dateEnd = "2017-04-31";
 // Matlab json parsing from file
 var tempMatrix = {};
 var irradiationMatrix = {};
@@ -83,10 +85,10 @@ var findPreds = function(db, callback) {
 
     var cursor = collection.find({$and: [
             {"prediction_made": 
-                {$gte: new Date("2017-03-01")}
+                {$gte: new Date(dateIni)}
             },
             {"prediction_made": 
-                {$lt: new Date("2017-05-01")}
+                {$lt: new Date(dateEnd)}
             }
         ]      
     });
@@ -135,13 +137,13 @@ mongo.connect(url, (err, db) => {
     findPreds(db, () => {
         console.log(t+' docs retrieved')
         // console.log('Temperatures', tempMatrix);
-        let fd_ir = fs.openSync('assets/ir_16-30.03.txt','w');
-        let fd_irpred = fs.openSync('assets/ir_pred_16-30.03.txt','w');
-        let fd_temp = fs.openSync('assets/temp_16-30.03.txt','w');
-        let fd_temppred = fs.openSync('assets/temp_pred_16-30.03.txt','w');
+        let fd_ir = fs.openSync('assets/ir_'+dateIni+'.txt','w');
+        let fd_irpred = fs.openSync('assets/ir_pred_'+dateIni+'.txt','w');
+        let fd_temp = fs.openSync('assets/temp_'+dateIni+'.txt','w');
+        let fd_temppred = fs.openSync('assets/temp_pred_'+dateIni+'.txt','w');
 
-        let fd_windspeed = fs.openSync('assets/windspeed_16-30.03.txt','w');
-        let fd_windbearing = fs.openSync('assets/windbearing_16-30.03.txt','w');
+        let fd_windspeed = fs.openSync('assets/windspeed_'+dateIni+'.txt','w');
+        let fd_windbearing = fs.openSync('assets/windbearing_'+dateIni+'.txt','w');
 
         fillValues();
 
