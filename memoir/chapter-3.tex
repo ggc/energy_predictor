@@ -45,92 +45,18 @@ Para la recogida de datos barajamos estas opciones:
 \subsubsection{Estación meteorológica de AEMET}
 \label{ssub:estación_meteorológica_de_aemet}
 
-Fue nuetra primera opción por ser una base solida a la que tenemos acceso. Tiene puntos fuertes como proximidad, soporte técnico y fiabilidad.
-
-Los datos eran proporcionados en el siguiente formato:
+Fue nuestra primera opción por ser una base solida a la que tenemos acceso. Tiene puntos fuertes como proximidad, soporte técnico y fiabilidad.
 
 En la estación meteorológica de Barajas
 
-\begin{table}[tb]
-    \caption{caption here}
-    \label{tab:tablename}
-    \centering
-
-    \begin{tabular}{l|cc}
-    \hline
-
-    \hline
-    \textbf{column 1} & \textbf{column 2} & \textbf{column 3} \\
-    \hline
-        value1 & value2 & value3\\
-    \hline
-
-    \hline
-    \end{tabular}
-\end{table}
-
-Indicativo: Indicativo climatológico
-NOMBRE: Nombre estación
-ALTITUD: Altitud de la estación (metros)
-NOM\_PROV: Provincia
-LONGITUD: Longitud geografica
-(La ultima cifra indica la orientación: 1 para longitud E y 2 para W)
-LATITUD: Latitud geografica
-DATUM: Datum de referencia
-
-TOTSOL: Insolación total diaria
-PTJESOL: Porcentaje de insolación
-SOL07: Insolación de 00 a 07
-SOL13: Insolación de 07 a 13
-SOL18: Insolación de 13 a 18
-SOL00: Insolación de 18 a 24
-
-Unidades y valores especiales:
-
-Horas UTC (Tiempo Universal Coordinado)
-
-Insolación en décimas de hora
-
-Porcentaje de insolación en
-
-
-En la estacion de Cuidad Universitaria y El Retiro
-
-Campos incluidos:
-Indicativo: Indicativo climatológico
-NOMBRE: Nombre estación
-ALTITUD: Altitud de la estación (metros)
-NOM\_PROV: Provincia
-LATITUD: Latitud geogrXfica
-DATUM: Datum de referencia
-
-TA: Temperatura del aire (ºC)
-
-Unidades y valores especiales:
-
-Horas UTC (Tiempo Universal Coordinado)
-
-Campos incluidos:
-Indicativo: Indicativo climatológico
-NOMBRE: Nombre estación
-ALTITUD: Altitud de la estación (metros)
-NOM\_PROV: Provincia
-LATITUD: Latitud geográfica
-DATUM: Datum de referencia
-
-VV10M: Velocidad media del viento (m/s)
-DV10M: Dirección media del viento (º (grados))
-VMAX10M: Velocidad mXxima del viento (m/s)
-DMAX10M: Dirección de la velocidad máxima del viento (º (grados))
-
-
+\input{code/AEMET_db1.txt}
 
 Unidades y valores especiales:
 
 Horas UTC (Tiempo Universal Coordinado)
 
 
-Como se observa, la insolación hace referencia la radiación solar \textbf{porcentual} y solo esta disponible en Barajas.
+La insolación hace referencia la radiación solar \textbf{porcentual} y solo esta disponible en Barajas.
 La temperatura en cambio solo esta disponible en Cuidad Universitaria y El Retiro.
 
 Queda excluida la base de datos de AEMET.
@@ -142,16 +68,17 @@ Descartada la opción de estación meteorologica, nos inclinamos por una API RES
 Las opciones fueron:
 - Madrid AEMET opendata
 - El tiempo
-- Aqui faltan algunas...
+- solarelectricityhandbook.com/solar-irradiance.html
+- National Renewable Energy Laboratory (NREL)
 - dark sky weather
 
-[Explicar por que descartamos AEMET opendata y El tiempo]
+Tras optar por revisar otras fuentes, se observo que no es tan común disponer de un servicio que provisione la irraciación solar a nivel horário. El NREL dispone un API con la irradiación a nivel mensual, pero no es suficiente.
 
-Finalmente nos quedamos con dark sky weather que era capaz de proporcionar todo.
+Tras ver que ninguno de estos trae valores reales de irradiación (temperatura todos) y dado que el objetivo es ver como se comportan los modelos de predicción en un escenario real, se opto por combinar la oclusión (La cobertura del cielo/nubes) con una funcion normal de 5 valores. La cantidad de sol recibida al día dibuja casi la misma gráfica cada día a lo largo de todo el año (Desfasada y/o ampliada en función de la estación). Las nubes son el mayor agravante, por ello las tomaremos como el factor importante. 
 
-Los datos necesarios para acceder al API son:
+Finalmente nos quedamos con dark sky weather que era capaz de proporcionar todo (Temperatura, Covertura del cielo, Velocidad del viento y Dirección del viento).
 
-[completar]
+Los datos necesarios para acceder al API son la url y la api key.
 
 Con estos datos ya es posible realizar llamadas en forma de peticiones http y obtener los resultados.
 
@@ -160,21 +87,23 @@ Las funciones usadas fueron:
 - Get token
 - Get weather
 
-[Formatos]
+%#TODO
+%\lstinputlisting{./code/Darksky_ForecastRequest.txt}
 
 A la hora de consultar el tiempo y las predicciones incluimos varias opciones para obtener resultados mas concisos.
 
-[opciones]
+%#TODO
+%\lstinputlisting{./code/Darksky_ResponseFormat.txt}
 
 Por lo tanto, el formato de las respuestas seria:
-
-[Copias schemas del server]
+%\lstinputlisting{./code/Darksky_ResponseSample.txt}
 
 
 \subsection{DB} 
 \label{sub:DB}
 
-La base de datos se ha elegido como no relacional porque...[explicar otra vez]
+Se ha elegido MongoDB como base de datos por no necesitar preparación para la inserción como podría ser crear una tabla en cualquier SQL DB. Esta es una de las ventajas de los documentos. Además no es necesaría ningun tipo de estructura relacional en los datos.
+
 
 \subsection{Server} 
 \label{sub:server}
@@ -183,8 +112,7 @@ Habiendo elegido la fuente de datos, es necesario automatizar la recogida y su a
 
 Para ello se opto por una aplicación creada con el framework nodejs y una base de datos mongo.
 
-Nodejs porque es versatil y comodo de tratar javascript con el.
-MongoDB porque no es necesaria ningun tipo de estructura relacional en los datos.
+Nodejs porque es versatil y comodo para tratar javascript con el.
 
 El servidor se encarga de realizar periodicamente las llamadas a la API de dark sky, anadir la fecha de la llamada (por claridad, ya que los las fechas estan representadas segun la base de tiempo POSIX*), quitar las predicciones horarias excepto del principio del dia e insertar las respuestas en la base de datos.
 
@@ -197,25 +125,32 @@ Finalmente el servidor esta emplazado fisicamente en [la facultad de informatica
 \subsection{Extractor de datos} 
 \label{sub:extractor_de_datos}
 
-Una vez tenemos la base de datos con contenido sufuciente en continuo crecimiento, ya se puede proceder a extraer los datos de la base de datos y pasarselos al modelo de planta fotovoltaica de simulink para que proporcione una potencia de salida.
+Una vez tenemos la base de datos con contenido suficiente en continuo crecimiento, ya se puede proceder a extraer los datos de la base de datos y pasarselos al modelo de planta fotovoltaica de simulink para que proporcione una potencia de salida.
 
 Para ello, realizaremos una consulta a la base de datos y escribiremos los resultados en un archivo de texto que reconozca matlab y facilite su manipulación.
 
+A lo largo del desarrollo se han implementado 2 tipos: Como txt donde cada linea tiene datos separados por tabulaciones y como json.
+
+Dado que la base de datos no contiene el 100\% de los datos (Se escapan alrededor de 2-4 entradas por mes) se rellenan esos datos con el valor mas próximo a fin suprimir posibles outliers.
+
+%#TODO
 [Codigo explicado]
+
+Con esto tenemos los ficheros preparados.
+%#TODO
+[json y txt samples]
+
 
 
 \subsection{Matlab}
 \label{sub:Matlab} 
 
-Para la implementación de los modelos se ha optado por usar matlab ya que a diferencia de C++ u otros lenguajes, tiene un toolbox de disenyo de redes neuronales muy completo y practico.
+Para la implementación de los modelos se ha optado por usar matlab ya que a diferencia de C++ u otros lenguajes, tiene un toolbox de diseño de redes neuronales muy completo y practico.
 
-Lista de herramientas usadas:
-- 
-
+La primera función de Matlab será extraer los valores de los json de la fase anterior y crear una señal para el modelo de Simulink. Una vez hecho esto se podrá comenzar la simulación y obtener los resultados. Hecho esto se discretiza la señal de salida para ajustarla al formato de horas y días para finalmente pasarselo a los modelos.
 
 
-
-\subsection{Simulink} 
+\subsection{Simulink}
 \label{sub:Simulink}
 
 El siguiente modelo simula una planta fotovoltaica de 100kW. 
@@ -250,130 +185,11 @@ El resultado de la simulación puede observarse en la siguiente figura:
     \label{fig:Ppv_output}
 \end{figure}
 
+
 \subsection{Modelos}
-\label{sub:Modelos}
 
-Para el estudio se han probado los siguientes modelos.
+A fin de desacoplar lo maximo posible la prediccion de otras etapas (Como importación del fichero, simulación o procesado de la señal de salida), los modelos leerán la variable del workspace $E_cur$ cuyo formato se que sea filas = días, columnas = horas
 
-\begin{itemize}
-    \item EWMA
-    \item Predictor for adaptive management from ETHZ
-    \item 2D linear predictor
-    \item WCMA
-    \item WCMA-PDR
-    \item Neural network
-    \item N4SID
-\end{itemize}
+En función del algoritmo y la cantidad de operaciones a nivel horário se optará por trasponer y hacer los accesos aprovechando el acceso de índice único de Matlab a fin de poder tratar de manera más cómoda.
 
-Para la experimentación se ha usado el mismo periodo de 15 dias, entre el 15 y el 30 de marzo del 2017.
-
-Los resultados mostrados a continuación se presentan como energía real producida más energía predicha y error entre ambas.
-
-
-\subsubsection{EWMA}
-\label{ssub:ewma}
-
-En la gráfica se puede observar que usa los valores del dia anterior con una ligera atenuacion de la media de las predicciones pasadas. El nivel de error es alto durante el amanecer y el ocaso.
-
-Horizonte de predicción: 24h
-$\alpha = TODO$
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{EWMA.jpg}
-    \caption{EWMA Prediction accurancy}
-    \label{fig:ewma_comp}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{EWMA_error.jpg}
-    \caption{EWMA Prediction error}
-    \label{fig:ewma_error}
-\end{figure}
-
-
-\subsubsection{Adaptive power management (del ETHZ)}
- \label{ssub:adaptive_power_management}
-
-El resultado de este tipo de predictor es muy similar al EWMA ya que realiza un cálculo basculado de el valor del dia anterior, pero sutilmente mejorado ya que tambien añade a la predicción los valores inmediatamente anteriores. El error en este caso es mas pronunciado en los extremos del dia pero mas estable en los puntos de irradiación estable.
-
-Horizonte de predicción: 24h
-$\alpha = TODO$
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{ETHZ.jpg}
-    \caption{ETHZ Prediction accurancy}
-    \label{fig:ethz_comp}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{ETHZ_error.jpg}
-    \caption{ETHZ Prediction error}
-    \label{fig:ethz_error}
-\end{figure}
-
-
-\subsubsection{Optimal 2D prediction filter} 
-\label{ssub:optimal_2d_prediction_filter}
-
-
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{Optimal2D.jpg}
-    \caption{2D filter Prediction accurancy}
-    \label{fig:o2d_comp}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{Optimal2D_error.jpg}
-    \caption{2D filter Prediction error}
-    \label{fig:o2d_error}
-\end{figure}
-
-
-\subsubsection{WCMA} 
-\label{ssub:wcma}
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{WCMA.jpg}
-    \caption{WCMA Prediction accurancy}
-    \label{fig:wcma_comp}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{WCMA_error.jpg}
-    \caption{WCMA Prediction error}
-    \label{fig:wcma_error}
-\end{figure}
-
-
-\subsubsection{WCMA with PDR} 
-\label{ssub:wcma_with_pdr}
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{WCMA-PDR.jpg}
-    \caption{WCMA with PDR Prediction accurancy}
-    \label{fig:wcmapdr_comp}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{WCMA-PDR_error.jpg}
-    \caption{WCMA with PDR Prediction error}
-    \label{fig:wcmapdr_error}
-\end{figure}
-
-
-\subsubsection{Red neuronal artificial} 
-\label{ssub:nn}
-
-El resultado de la red neuronal es especialmente bueno si consideramos valores estables, pero el tiempo de procesado y aprendizaje (El cual deberá ser continuo)
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{nn.jpg}
-    \caption{neural network Prediction accurancy}
-    \label{fig:nn_comp}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{nn_error.jpg}
-    \caption{neural network Prediction error}
-    \label{fig:nn_error}
-\end{figure}
-
+Todos los modelos estan preparados para realizar una única predicción con las constantes definidas (Sin etapa de ajuste como podría ser realizar una predicción con cada constante y elegir la menor dispersión) y mostrar el resultado final con una comparación entre valores reales - predichos y el error.
