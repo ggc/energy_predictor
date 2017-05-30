@@ -13,7 +13,7 @@ La temperatura y radiación sera recopilada por un api rest, almacenada en una b
 Tras ejecutar la simulación, los valores de potencia resultantes seran pasados a los distintos modelos para obtener las predicciones.
 Una vez obtenidas las predicciones, seran contrastadas con los valores reales obteniendo asi graficas que prueben la certeza de estas.
 
-A continuahción se explican cada uno de los componentes del entorno.
+A continuación se explican cada uno de los componentes del entorno.
 
 \begin{itemize}
     \item Preprocesado
@@ -193,3 +193,26 @@ A fin de desacoplar lo maximo posible la prediccion de otras etapas (Como import
 En función del algoritmo y la cantidad de operaciones a nivel horário se optará por trasponer y hacer los accesos aprovechando el acceso de índice único de Matlab a fin de poder tratar de manera más cómoda.
 
 Todos los modelos estan preparados para realizar una única predicción con las constantes definidas (Sin etapa de ajuste como podría ser realizar una predicción con cada constante y elegir la menor dispersión) y mostrar el resultado final con una comparación entre valores reales - predichos y el error.
+
+\subsubsection{N4SID}
+\label{ssub:n4sid}
+
+Consideraremos también un N4SID (Algorítmo numérico para identificación de sistemas de espacios de subespacios de estados) y su implementación de Matlab. Con la función $m = n4sid(data,order,'Property1',Value1,...,'PropertyN',ValueN)$, siendo m el modelo resultante [idss], data la entrada y salida [idss], order el valor de nx que en este caso dejaremos en 'best' el cual escogerá el mejor entre 1 y 10, y finalmente pares propiedad-valor, que unicamente usaremos N4Horizon, que define el horizonte de predicción y será 24h.
+
+Para este modelo de predicción tomaremos los valores de salida del modelo de simulink $pe_asm_generator_2$ separandolos en 75\% para entrenamiento y 25\% para validación. 
+
+Lo más importante para que funcione adecuadamente, no solo el modelo sino también un molino real, es que la velocidad se encuentre entre 3 y 23m/s. De otro modo la salida será 0.
+
+Entrenamos realizando un bucle entre 8 y 168 que representan los valores del pasado tomados para el entrenamiento. Entre 1/3 de día y 7 días. Guardando en cada iteración el valor de ajuste para finalmente crear el modelo con los valores finales.
+
+
+
+\subsubsection{ARMA/ARIMA}
+\label{ssub:arma_arima}
+
+Para realizar la predicción con alguno de estos modelos primero habría que estudiar si la serie a tratar es estacionaria (Se realiza solo con la de entrenamiento). Si es estacionaria, se puede omitir la Integración (ARMA) si no, ARIMA.
+
+Hay dos tipos de estacionariedad, en media y en varianza, 
+
+%#TODO
+
