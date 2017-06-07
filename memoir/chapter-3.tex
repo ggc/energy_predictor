@@ -2,14 +2,16 @@
 
 \graphicspath{ {./graphs/} }
 
-En este capitulo explicaremos todo el proceso de exprerimentación, desde la recogida de datos hasta la obtención de resultados
+En este capítulo explicaremos todo el proceso de experimentación, desde la recogida de datos hasta la obtención de resultados como se ilustraba en el diagrama \ref{fig:full_pipeline}.
+
 
 
 \section{Entorno}
+
 Para poder llevar a cabo unos resultados validos seria necesario tener una planta solar capaz de producir energía y la monitorización de esta. En este caso, dispondriamos de la potencia actual generada, la cual es la entrada a los algoritmos de predicción. 
 
 Dado que no es así, simularemos este comportamiento con un proceso manual de recogida y procesado de datos compuesto por una planta simulada con actuación sobre un historico.
-La temperatura y radiación sera recopilada por un api rest, almacenada en una base de datos, extraida y formateada para ser introducida en el modelo de planta fotovoltaica de matlab.
+La temperatura y radiación sera recopilada por un RESTful API, almacenada en una base de datos, extraida y formateada para ser introducida en el modelo de planta fotovoltaica de Matlab.
 Tras ejecutar la simulación, los valores de potencia resultantes seran pasados a los distintos modelos para obtener las predicciones.
 Una vez obtenidas las predicciones, seran contrastadas con los valores reales obteniendo asi graficas que prueben la certeza de estas.
 
@@ -33,6 +35,7 @@ A continuación se explican cada uno de los componentes del entorno.
 
 \subsection{RESTful API} 
 \label{sub:API}
+
 El primer paso para la puesta en marcha del modelo de planta solar es recoger los valores de radiación y temperatura.
 
 Para la recogida de datos barajamos estas opciones:
@@ -45,11 +48,11 @@ Para la recogida de datos barajamos estas opciones:
 \subsubsection{Estación meteorológica de AEMET}
 \label{ssub:estación_meteorológica_de_aemet}
 
-Fue nuestra primera opción por ser una base solida a la que tenemos acceso. Tiene puntos fuertes como proximidad, soporte técnico y fiabilidad.
+Fue nuestra primera opción por ser una base de datos solida a la que tenemos acceso. Tiene puntos fuertes como proximidad, soporte técnico y fiabilidad.
 
 En la estación meteorológica de Barajas
 
-\input{code/AEMET_db1.txt}
+% \input{code/AEMET_db1.txt}
 
 Unidades y valores especiales:
 
@@ -78,7 +81,7 @@ Tras ver que ninguno de estos trae valores reales de irradiación (temperatura t
 
 Finalmente nos quedamos con dark sky weather que era capaz de proporcionar todo (Temperatura, Covertura del cielo, Velocidad del viento y Dirección del viento).
 
-Los datos necesarios para acceder al API son la url y la api key.
+Los datos necesarios para acceder al API son la url y la API KEY.
 
 Con estos datos ya es posible realizar llamadas en forma de peticiones http y obtener los resultados.
 
@@ -127,7 +130,7 @@ Finalmente el servidor esta emplazado fisicamente en [la facultad de informatica
 
 Una vez tenemos la base de datos con contenido suficiente en continuo crecimiento, ya se puede proceder a extraer los datos de la base de datos y pasarselos al modelo de planta fotovoltaica de simulink para que proporcione una potencia de salida.
 
-Para ello, realizaremos una consulta a la base de datos y escribiremos los resultados en un archivo de texto que reconozca matlab y facilite su manipulación.
+Para ello, realizaremos una consulta a la base de datos y escribiremos los resultados en un archivo de texto que reconozca Matlab y facilite su manipulación.
 
 A lo largo del desarrollo se han implementado 2 tipos: Como txt donde cada linea tiene datos separados por tabulaciones y como json.
 
@@ -145,7 +148,7 @@ Con esto tenemos los ficheros preparados.
 \subsection{Matlab}
 \label{sub:Matlab} 
 
-Para la implementación de los modelos se ha optado por usar matlab ya que a diferencia de C++ u otros lenguajes, tiene un toolbox de diseño de redes neuronales muy completo y practico.
+Para la implementación de los modelos se ha optado por usar Matlab ya que a diferencia de C++ u otros lenguajes, tiene un toolbox de diseño de redes neuronales muy completo y practico.
 
 La primera función de Matlab será extraer los valores de los json de la fase anterior y crear una señal para el modelo de Simulink. Una vez hecho esto se podrá comenzar la simulación y obtener los resultados. Hecho esto se discretiza la señal de salida para ajustarla al formato de horas y días para finalmente pasarselo a los modelos.
 

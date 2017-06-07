@@ -1,15 +1,35 @@
-\chapter{Proposito y objetivos}
-\label{cha:introduccion}
+\chapter{Introducción}
 
 
-\section{Introducción}
+\section{Motivación}
 
-Es bien sabido que el ser humano, desde tiempos inmemoriables, ha querido predecir el futuro. Y aunque en este trabajo sea solo en materia energética, seguiremos intentandolo. Dependiendo de la fuente puede ser más o menos factible e.g. Calcular la energía producida por una central geotérmica o una planta solar es mas factible que la producida por un molino de viento, pues de la fuente de calor o del sol se pueden extraer patrones y la velocidad del cambio es menor. Sin embargo, el viento (La segunda fuente que trataremos) tiene una gran variabilidad y no hay periodicidad aunque se puedan encontrar patrones.
+La cantidad de procesamiento cada vez es mayor y los centros de datos (CPD) cada vez son más grandes y consumen más. Ademas se sabe que el consumo de un CPD es constante a lo largo del tiempo, por esto cada vez se opta por suministrar dichos centros con energía obtenida de fuentes renovables, ya que pueden suponer un ahorro energético considerable. Aunque aun no es practicable alimentar un CPD completamente con energías renovables, se puede asegurar gran parte del consumo con estas fuentes.
 
-Por esto estudiaremos modelos de predicción que tengan como objetivo predecir la energía que será producida por una planta solar o molino de viento. Con ello, y quedando fuera del ámbito de este trabajo, se podrán crean planes de estimación de consumo combinando la predicción, una fuente de energía auxiliar como unas baterias y la red eléctrica a fin de mejorar el consumo.
+Uno de los problemas del abastecimiento con energías renovables es la impredecibilidad de las fuentes, el sol y el viento. Estas dos fuentes no son constantes en el tiempo (El sol sale y se esconde cada día y el viento sopla con mayor o menor fuerza en función del estado de la atmósfera). En consecuencia la producción es muy inestable y aleatoria.
+
+La solución clásica a estos problemas es almacenar la energía en baterías para el consumo en momentos de no producción.
+
+Otro problema es que las baterías suelen tener una duración y no puede asegurarse todos los periodos de no producción. Así que finalmente se deberá consumir energía de la red eléctrica.
+
+Pongamos un ejemplo: Si se acerca un periodo de no producción de 8 horas y las baterías duran 4 horas, en que 4 horas sera mejor usar las baterías?
+
+En principio nos debería dar igual, pero si nos encontramos en un país en el que hay tarifas horarias quizá convendría usar las baterías en el momento en que la electricidad es mas cara.
+De este pensamiento surge la predicción energética.
+
+Si pudiésemos predecir con moderada exactitud la energía que se producirá, podremos realizar un plan que permitirá ahorrar costes en gran medida
 
 
 \section{Propósito}
 
-Nuestro objetivo es examinar qué metodología tiene los mejores resultados observados en la predicción energética de una planta solar y una eolica con un horizonte de 24h y con un entrenamiento a lo largo de 14 dias.
+Nuestro objetivo es examinar qué metodología tiene los mejores resultados observados en la predicción energética de una planta solar y una eólica con un horizonte de 24h.
 
+Para la predicción se pueden usar 2 tipos de modelos de predicción: Modelos analíticos, que se basan en realizar un análisis exhaustivo del problema y proporcionar una solución detallada, y Modelos auto-regresivos, que se describen un proceso que proporciona una salida la cual depende linealmente de sus valores anteriores o "histórico".
+
+Dado que queremos obtener un conjunto de reglas genéricas, optaremos por usar modelos autor-regresivos que se basan en el histórico para realizar predicciones y permiten abstraernos de la planta, el panel y las condiciones.
+
+Con estos modelos, realizaremos predicciones con valores extraídos de una planta solar/eólica (Simulada) y tras extraer los resultados de la predicción y el error, analizaremos los diferentes puntos.
+
+Ademas definiremos Horizonte de predicción como el limite máximo en términos temporales en los cuales se puede realizar una predicción válida. En nuestro caso será el periodo máximo para las predicciones.
+El horizonte de predicción puede adquirir cualquier valor, desde ultra-corto plazo como puede ser de minutos hasta a largo plazo como son semanas.
+
+En materia de predicción energética, la precisión primará sobre la lejanía del horizonte de predicción, por esto barajaremos valores cercanos. Además, debido a la periodicidad del sol y la duración habitual de las baterías optaremos por 24 horas, que es el valor mínimo de calidad de días y esta por encima de la duración de un equipo de baterías (Esto podría ser 8 horas).
