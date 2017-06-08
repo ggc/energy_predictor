@@ -4,7 +4,7 @@ function WCMA_PDR()
 %     Tamb = Tamb_file.data; %Tamb_t(time, day)
 %     D = size(Tamb,1);
 %     T = size(Tamb,2);
-    Ppv = evalin('base','E_cur');
+    Ppv = discretize_signals();
 %     file = importdata('../data_formatted/tested_sample.txt','\t',1);
 %     E = file.data;
     D = size(Ppv,1);
@@ -189,21 +189,7 @@ function WCMA_PDR()
     end
 %     plot(1:D*T, E_pdr(:), 1:D*T, Ppv(:));
     
-%% Plot results
-    E_pdr_t = E_pdr';
-    E_t = Ppv';
-    error = E_pdr_t - E_t;
-    
-    figure();
-    plot(1:D*T, error(:));
-    title('Error');
-    xlabel('Hous from start');
-    ylabel('W');
-    
-    figure();
-    plot(1:T*D,E_pdr_t(:), 1:D*T, E_t(:), '--k');
-    title('WCMA\_PDR vs Real');
-    xlabel('Hous from start');
-    ylabel('W');
+    %% Plot results
+    model_plotter(Ppv, E_pdr);
     
 end

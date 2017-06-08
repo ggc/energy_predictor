@@ -8,7 +8,7 @@ function E_ewma = EWMA()
 %     E = file.data;
     
     % Energy values from PV Matlab Model
-    E = evalin('base','E_cur');
+    E = discretize_signals();
 
     D = size(E,1);
     T = size(E,2);
@@ -32,19 +32,7 @@ function E_ewma = EWMA()
         end
     end
     
-    E_ewma_trans = E_ewma';
-    E_trans = E';
-    error = E_ewma_trans - E_trans;
-    figure
-    plot(1:D*T, error(:));
-    title('Error');
-    xlabel('Hous from start');
-    ylabel('W');
-    figure
-%   T*D/2
-    plot(1:T*D,E_ewma_trans(:), 1:(D*T), E_trans(:),'--k');
-    title('EWMA vs Real');
-    xlabel('Hours from start');
-    ylabel('W');
+    
+    model_plotter(E, E_ewma);
 
 end

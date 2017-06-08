@@ -24,6 +24,5 @@ function nn_inputs_builder()
         end
     end
 
-    x = inputs;
-    assignin('base', 'x', x);
+    assignin('base', 'inputs', inputs);
 end

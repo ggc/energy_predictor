@@ -8,7 +8,7 @@ windSpeed=timeseries(u,t);
 
 model = 'pe_asm_generator_2';
 load_system(model)
-sim(model)
+% sim(model)
 simOut = sim(model);
 %discretizamos real_power
 
@@ -42,10 +42,10 @@ C=real_power(1:ceil(length(real_power)/336):length(real_power),1);
 
 %%%%data=[dats(1:336,1),dats(1:336,2),C];%%%%%%%%
 %%%%%%%n4sid
-M=zeros(1,150-10);
-M1=zeros(1,150-10);
+M=zeros(1,168-8);
+M1=zeros(1,168-8);
 %for i=1:24;
-    for j=10:150;
+    for j=8:168;
         future = 24;
         past= j;
         %etapa entrenamiento
@@ -66,8 +66,8 @@ M1=zeros(1,150-10);
         fprintf(sprintf('FIT Validatoin: %d\n', fit1));
  
       %guardamos datos de ajuste
-        M(1,j-9) = fit;
-        M1(1,j-9) = fit1;  
+        M(1,j-7) = fit;
+        M1(1,j-7) = fit1;  
     end
 %end
 

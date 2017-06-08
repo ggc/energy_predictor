@@ -35,17 +35,9 @@ function [ E_nn ] = nn_predictor_narnet()
     for o = 1:length(outputs)
         y{1,o} = outputs{1,o}(1);
     end
+    E_cur_t = E_cur';
     
-    E_nn = E_cur';
-    E_nn = E_nn(:);
     
-    figure;
-    plot(1:length(outputs),cell2mat(y),1:length(outputs),E_nn);
-    
-    error = cell2mat(y) - E_nn';
-    figure;
-    plot(error);
-    
-    ret;
+    model_plotter(E_cur_t(:), cell2mat(y)');
 end
 

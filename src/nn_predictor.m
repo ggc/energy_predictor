@@ -21,7 +21,7 @@ function [ E_nn ] = nn_predictor()
     error = zeros(T,D);
 
     % - Build prediction of a full day (d)
-        E_nn(:,1) = net(Es(1,:)');
+    E_nn(:,1) = net(Es(1,:)');
 
     % nn works with 24h horizon (fires at the end of the day)
     for d = 2:D

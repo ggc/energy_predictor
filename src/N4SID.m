@@ -1,23 +1,27 @@
 function model = N4SID() 
-    ir = importdata('../data_formatted/ir_2017-04-01.txt');
-    ir = jsondecode(ir{1});
+%     ir = importdata('../data_formatted/ir_2017-04-01.txt');
+%     ir = jsondecode(ir{1});
+% 
+%     fields = fieldnames(ir);
+% 
+%     D = numel(fields);
+%     T = numel( fieldnames( ir.(fields{1}) ) );
+%     dats = zeros(24,numel(fields)); % Because we need cols-days, rows-hours!!!
+%     x = 0:23;
+%     y = gaussmf(x,[2.5 15]);
+%     
+%     for i = 1:numel(fields)
+%         dats(:,i) = (1-struct2array(ir.(fields{i}))) * 900;
+%         for j = 1:24
+%             dats(j,i) = dats(j,i) * y(j);
+%         end
+%     end
+%       
+    E = discretize_signals();
 
-    fields = fieldnames(ir);
-
-    D = numel(fields);
-    T = numel( fieldnames( ir.(fields{1}) ) );
-    dats = zeros(24,numel(fields)); % Because we need cols-days, rows-hours!!!
-    x = 0:23;
-    y = gaussmf(x,[2.5 15]);
     
-    for i = 1:numel(fields)
-        dats(:,i) = (1-struct2array(ir.(fields{i}))) * 900;
-        for j = 1:24
-            dats(j,i) = dats(j,i) * y(j);
-        end
-    end
     
-    dats = dats(:);
+    dats = E(:);
     
     C = discretize_signals; C = C';
     C = C(:);

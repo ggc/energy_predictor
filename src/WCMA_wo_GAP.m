@@ -4,7 +4,7 @@ function pred = WCMA_wo_GAP()
 %     Tamb = Tamb_file.data; %Tamb_t(time, day)
 %     D = size(Tamb,1);
 %     T = size(Tamb,2);
-    Ppv = evalin('base','E_cur');
+    Ppv = discretize_signals();
 
     D = 14;
     T = 24;

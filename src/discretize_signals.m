@@ -1,6 +1,10 @@
 function E_cur = discretize_signals() 
-    load('../workspace/vars/Ppv_cur_01-15.04.17.mat');
 %     load('../workspace/vars/Ppv_cur_16-30.03.17.mat');
+%     load('../workspace/vars/Ppv_cur_01-15.04.17.mat');
+%     load('../workspace/vars/Ppv_cur_16-30.04.17.mat');
+    load('../workspace/vars/Ppv_cur_16-30.03.17_REAL.mat');
+%     load('../workspace/vars/Ppv_cur_01-15.04.17_REAL.mat');
+%     load('../workspace/vars/Ppv_cur_16-30.04.17_REAL.mat');
 
     samples_per_day = 10000;
     D = 15;

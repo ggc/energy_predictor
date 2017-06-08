@@ -7,7 +7,7 @@ function E_wcma = WCMA()
     
 %     file = importdata('../data_formatted/tested_sample.txt','\t',1);
 %     E = file.data;
-    E = evalin('base','E_cur');
+    E = discretize_signals();
     D = size(E,1);
     T = size(E,2);
     
@@ -46,7 +46,7 @@ function E_wcma = WCMA()
         if(t-k1+1 < 1)
             k1 = 1;
         end
-        sum_e = sum(E(1:d-1,t-k1+1));
+        sum_e = sum(E(1:d-1, t-k1+1));
 %         disp('sum_e');
 %         disp(sum_e);
         disp('E(1:d-1,t-k+1)');
@@ -118,20 +118,5 @@ function E_wcma = WCMA()
     
     
     %% Plot results
-    
-    E_wcma_trans = E_wcma';
-    E_trans = E';
-    error = E_wcma_trans - E_trans;
-    
-    figure();
-    plot(1:D*T, error(:));
-    title('Error');
-    xlabel('Hous from start');
-    ylabel('W');
-    
-    figure();
-    plot(1:T*D,E_wcma_trans(:), 1:D*T, E_trans(:), '--k');
-    title('WCMA vs Real');
-    xlabel('Hous from start');
-    ylabel('W');
+    model_plotter(E, E_wcma);
 end

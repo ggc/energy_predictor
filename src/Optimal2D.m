@@ -1,5 +1,6 @@
 function E_o2d = Optimal2D()
-    E = evalin('base','E_cur'); % Real PV plant only knows current power
+
+    E = discretize_signals(); % Real PV plant only knows current power
     
     D = size(E,1);
     T = size(E,2);
@@ -22,8 +23,8 @@ function E_o2d = Optimal2D()
     % Fill predicted values with Algorithm output
     for d = 1:D
         for t = 1:T
-            x = prevValues(d,t);
-            y = prevDays(d,t);
+            x = prevValues(d,t+1);
+            y = prevDays(d,t+1);
             z = prevHours(d,t);
             E_o2d(d, t) = a1*sum(sum(x))/(W-1)^2 + a2*sum(sum(y))/W + a3*sum(sum(z))/W;
         end
@@ -49,7 +50,7 @@ function E_o2d = Optimal2D()
     function ret = prevDays(day, hour)
         ret = zeros(W);
         for d_i = 1:W
-            ret(d_i) = getE(day-d_i+1, hour);
+            ret(d_i) = getE(day-d_i+1, min(T, hour));
         end
     end
 
@@ -58,26 +59,11 @@ function E_o2d = Optimal2D()
         ret = zeros(W-1,W-1);
         for d_i = 1:W-1
             for d_j = 1:W-1
-                ret(d_i,d_j) = getE(day-d_i, hour-d_j);
+                ret(d_i,d_j) = getE(day-d_i, min(T,hour-d_j) );
             end
         end
     end
     
     %% Plot results
-    
-    E_o2d_trans = E_o2d';
-    E_trans = E';
-    err = E_o2d_trans - E_trans;    
-    
-    figure();
-    plot(1:D*T, err(:));
-    title('Error');
-    xlabel('Hous from start');
-    ylabel('W');
-    
-    figure();
-    plot(1:T*D,E_o2d_trans(:), 1:D*T, E_trans(:), '--k');
-    title('Optimal2D vs Real');
-    xlabel('Hous from start');
-    ylabel('W');
+    model_plotter(E, E_o2d);
 end

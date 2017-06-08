@@ -27,7 +27,7 @@ end
 formatSpec = '%f%f%[^\n\r]';
 
 %% Open the text file.
-fileID = fopen('dattts.txt','r');
+fileID = fopen('wind_2017-04-01.txt','r');
 
 %% Read columns of data according to format string.
 % This call is based on the structure of the file used to generate this

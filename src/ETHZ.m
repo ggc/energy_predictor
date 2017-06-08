@@ -7,7 +7,7 @@ function E_ethz = ETHZ()
 %     Tamb = Tamb_file;
 %     D = size(Tamb,1);
 %     T = size(Tamb,2);
-    E = evalin('base','E_cur');
+    E = discretize_signal();
 
 %     file = importdata('../data_formatted/tested_sample.txt','\t',1);
 %     E = file.data;
@@ -34,7 +34,7 @@ function E_ethz = ETHZ()
         end
     end
 
-    % Long term measured power (S sample size)
+    % Measured power using S samples weighted with alpha
     function ret = En( pos, N )
         if N == 0
             ret = 0;
@@ -72,20 +72,20 @@ function E_ethz = ETHZ()
     
     
     %% Plot results
-    
-    E_ethz_trans = E_ethz';
-    E_trans = E';
-    error = E_ethz_trans - E_trans;
-    
-    figure();
-    plot(1:D*T, error(:));
-    title('Error');
-    xlabel('Hous from start');
-    ylabel('W');
-    
-    figure();
-    plot(1:T*D,E_ethz_trans(:), 1:D*T, E_trans(:), '--k');
-    title('ETHZ vs Real');
-    xlabel('Hous from start');
-    ylabel('W');
+    model_plotter(E, E_ethz);
+%     E_ethz_trans = E_ethz';
+%     E_trans = E';
+%     error = E_ethz_trans - E_trans;
+%     
+%     figure();
+%     plot(1:D*T, error(:));
+%     title('Error');
+%     xlabel('Hous from start');
+%     ylabel('W');
+%     
+%     figure();
+%     plot(1:T*D,E_ethz_trans(:), 1:D*T, E_trans(:), '--k');
+%     title('ETHZ vs Real');
+%     xlabel('Hous from start');
+%     ylabel('W');
 end

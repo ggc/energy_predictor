@@ -12,8 +12,10 @@ function prediction = n4sid_prediction()
 %     end
 %     
 %     u = (1-u)*1000;
-    Ir = evalin('base', 'Ir');
-    u = Ir.signals.values(:);
+    E_cur = discretize_signals();
+%     Ir = evalin('base', 'Ir');
+%     u = Ir.signals.values(:);
+    u = E_cur;
 
     load('../workspace/vars/Ppv_cur_16-30.04.17_REAL.mat');
     n = 360;
@@ -24,17 +26,12 @@ function prediction = n4sid_prediction()
     input = iddata(y,u,1);
     %% Running N4SID
     load('../workspace/n4sid_solar.mat');
-%     n4sid_model = N4SID();
+%     n4sid_solar = N4SID();
     
     %% Compare outputs
     
-    [prediction,fitt,~]=compare(input,n4sid_model,24);
+    [prediction,fitt,~]=compare(input,n4sid_solar,24);
     
-    
-    
-    plot(1:n, prediction.OutputData, 1:n, input.OutputData,'--k');
-    title('N4SID vs Real');
-    xlabel('Hours from start');
-    ylabel('KW');
+    model_plotter(E_cur(:), prediction.OutputData)
 
 end
